@@ -1,8 +1,11 @@
 package com.reportage.kipodiary;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.widget.TextView;
 import android.os.Bundle;
 
@@ -10,7 +13,32 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isAppInBackground()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private boolean isAppInBackground() {
+        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(getPackageName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private TextView today_text, today_head_date;
     private int num;
