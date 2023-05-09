@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top"
+    android:orientation="vertical">
+
+    <!--Понедельник-->
+    <TextView
+        android:id="@+id/monday_head_date_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/monday_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"/>
+
+    <!--Вторник-->
+    <TextView
+        android:id="@+id/tuesday_head_date_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tuesday_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"/>
+
+    <!--Среда-->
+    <TextView
+        android:id="@+id/wednesday_head_date_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/wednesday_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"/>
+
+    <!--Четверг-->
+    <TextView
+        android:id="@+id/thursday_head_date_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/thursday_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"/>
+
+    <!--Пятница-->
+    <TextView
+        android:id="@+id/friday_head_date_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/friday_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"/>
+
+    <!--Суббота-->
+    <TextView
+        android:id="@+id/saturday_head_date_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/saturday_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"/>
+
+    <!--Воскресенье-->
+    <TextView
+        android:id="@+id/sunday_head_date_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/sunday_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"/>
+
+
+
+
+
+</LinearLayout>

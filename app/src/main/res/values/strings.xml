@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">KIPOdiary</string>
+    <string name="monday_header">Понедельник</string>
+    <string name="tuesday_header">Вторник</string>
+    <string name="wednesday_header">Среда</string>
+    <string name="thursday_header">Четверг</string>
+    <string name="friday_header">Пятница</string>
+    <string name="saturday_header">Суббота</string>
+</resources>
