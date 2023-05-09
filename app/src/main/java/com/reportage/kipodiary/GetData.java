@@ -40,9 +40,6 @@ public class GetData extends AsyncTask<String, Void, String> {
     protected String doInBackground (String... arg0) {
 
         try {
-            //PHP Скрипт
-            String link="http://mrnikkly.beget.tech/getschedule.php";
-
             // Первый день недели
             Calendar calFirstDay = Calendar.getInstance();
             calFirstDay.set(Calendar.DAY_OF_WEEK,calFirstDay.getFirstDayOfWeek());
@@ -58,8 +55,12 @@ public class GetData extends AsyncTask<String, Void, String> {
             String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
 
 
-            //Передаем значение id
 
+
+            //PHP Скрипт
+            String link="http://mrnikkly.beget.tech/getschedule.php";
+
+            //Задаем значение id и Дату недели
             String data= URLEncoder.encode("id", "UTF-8")+ "=" + id
                     + "&" + URLEncoder.encode("weekData", "UTF-8")+ "=" + weekData;
 
@@ -72,7 +73,7 @@ public class GetData extends AsyncTask<String, Void, String> {
             //Жду что выдаст PHP
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 
-            wr.write( data );
+            wr.write(data);
             wr.flush();
 
             //Буфер ридера
