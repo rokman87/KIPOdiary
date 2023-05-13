@@ -5,14 +5,15 @@ import android.os.AsyncTask;
 import android.text.Html;
 import android.widget.TextView;
 
-
-
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,17 +33,68 @@ public class GetData extends AsyncTask<String, Void, String> {
         this.id= day;
 
     }
+    public class Lesson {
+        private int lesson_number;
+        private String lesson_time;
+        private String building;
+        private String auditorium;
+        private String discipline;
+        private String teacher;
 
+        public int lesson_number() {
+            return lesson_number;
+        }
 
+        public String lesson_time() {
+            return lesson_time;
+        }
 
+        public String building() {
+            return building;
+        }
+        public String auditorium() {
+            return auditorium;
+        }
+
+        public String discipline() {
+            return discipline;
+        }
+
+        public String teacher() {
+            return teacher;
+        }
+    }
+
+    private static String convertStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return sb.toString();
+    }
 
     @Override
     protected String doInBackground (String... arg0) {
 
+        String response;
         try {
             // Первый день недели
             Calendar calFirstDay = Calendar.getInstance();
-            calFirstDay.set(Calendar.DAY_OF_WEEK,calFirstDay.getFirstDayOfWeek());
+            calFirstDay.set(Calendar.DAY_OF_WEEK, calFirstDay.getFirstDayOfWeek());
             Date firstDayOfWeek = calFirstDay.getTime();
             String firstDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(firstDayOfWeek);
 
@@ -54,44 +106,30 @@ public class GetData extends AsyncTask<String, Void, String> {
             //Объединяем
             String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
 
+            URL url = new URL("http://mrnikkly.beget.tech/api.php"); // URL-адрес вашего PHP-скрипта
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
 
+            OutputStream os = connection.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write("id=" + id + "&weekData=" + weekData); // Здесь указываются параметры в формате "имя=значение&имя=значение"
+            writer.flush();
+            writer.close();
+            os.close();
 
+            connection.connect();
 
-            //PHP Скрипт
-            String link="http://mrnikkly.beget.tech/getschedule.php";
-
-            //Задаем значение id и Дату недели
-            String data= URLEncoder.encode("id", "UTF-8")+ "=" + id
-                    + "&" + URLEncoder.encode("weekData", "UTF-8")+ "=" + weekData;
-
-            // Создаем соединение
-            URL url = new URL(link);
-            URLConnection conn = url.openConnection();
-
-            conn.setDoOutput(true);
-
-            //Жду что выдаст PHP
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-
-            wr.write(data);
-            wr.flush();
-
-            //Буфер ридера
-            BufferedReader reader = new BufferedReader(new
-                    InputStreamReader(conn.getInputStream()));
-
-            //Результат
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-
-            //Читаем ответ сервера
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-                break;
+            int responseCode = connection.getResponseCode();
+            response = null;
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                InputStream is = connection.getInputStream();
+                response = convertStreamToString(is);
+                is.close();
             }
 
+            connection.disconnect();
 
-            return sb.toString();
         }
 
         //При ошибке в try
@@ -99,6 +137,7 @@ public class GetData extends AsyncTask<String, Void, String> {
             return new String("Exception: " + e.getMessage());
         }
 
+        return response;
     }
 
     //Вывод
