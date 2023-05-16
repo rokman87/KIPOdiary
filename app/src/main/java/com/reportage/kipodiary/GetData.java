@@ -106,7 +106,7 @@ public class GetData extends AsyncTask<String, Void, String> {
             //Объединяем
             String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
 
-            URL url = new URL("http://mrnikkly.beget.tech/api.php"); // URL-адрес вашего PHP-скрипта
+            URL url = new URL("http://mrnikkly.beget.tech/getschedule.php"); // URL-адрес PHP-скрипта
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
