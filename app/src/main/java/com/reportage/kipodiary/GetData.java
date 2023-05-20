@@ -33,37 +33,6 @@ public class GetData extends AsyncTask<String, Void, String> {
         this.id= day;
 
     }
-    public class Lesson {
-        private int lesson_number;
-        private String lesson_time;
-        private String building;
-        private String auditorium;
-        private String discipline;
-        private String teacher;
-
-        public int lesson_number() {
-            return lesson_number;
-        }
-
-        public String lesson_time() {
-            return lesson_time;
-        }
-
-        public String building() {
-            return building;
-        }
-        public String auditorium() {
-            return auditorium;
-        }
-
-        public String discipline() {
-            return discipline;
-        }
-
-        public String teacher() {
-            return teacher;
-        }
-    }
 
     private static String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -92,19 +61,19 @@ public class GetData extends AsyncTask<String, Void, String> {
 
         String response;
         try {
-            // Первый день недели
-            Calendar calFirstDay = Calendar.getInstance();
-            calFirstDay.set(Calendar.DAY_OF_WEEK, calFirstDay.getFirstDayOfWeek());
-            Date firstDayOfWeek = calFirstDay.getTime();
-            String firstDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(firstDayOfWeek);
+                // Первый день недели
+                Calendar calFirstDay = Calendar.getInstance();
+                calFirstDay.set(Calendar.DAY_OF_WEEK, calFirstDay.getFirstDayOfWeek());
+                Date firstDayOfWeek = calFirstDay.getTime();
+                String firstDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(firstDayOfWeek);
 
-            //Последний день недели
-            Calendar calLastDay = Calendar.getInstance();
-            calLastDay.set(Calendar.DAY_OF_WEEK, calLastDay.getFirstDayOfWeek() + 6);
-            Date lastDayOfWeek = calLastDay.getTime();
-            String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
-            //Объединяем
-            String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
+                //Последний день недели
+                Calendar calLastDay = Calendar.getInstance();
+                calLastDay.set(Calendar.DAY_OF_WEEK, calLastDay.getFirstDayOfWeek() + 6);
+                Date lastDayOfWeek = calLastDay.getTime();
+                String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
+                //Объединяем
+                String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
 
             URL url = new URL("http://mrnikkly.beget.tech/getschedule.php"); // URL-адрес PHP-скрипта
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

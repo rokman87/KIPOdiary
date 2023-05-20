@@ -1,13 +1,14 @@
 package com.reportage.kipodiary;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.TextView;
 import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,17 +83,15 @@ public class MainActivity extends AppCompatActivity {
 
         for (int t = 0; t < headers.size(); t++) {
 
-            //Получение даты
+            //Получение дня недели
             Date today_date = new Date();
             today_date = new Date(today_date.getTime() + ((86400000)*t) - ((86400000)*num));
-
-
             //Преобразование в простой формат даты
             String date_str = new SimpleDateFormat("dd-MM-yyyy").format(today_date);
-
             //День недели
             String weekday = new SimpleDateFormat("EEEE").format(today_date);
             weekday = weekday.substring(0, 1).toUpperCase() + weekday.substring(1);
+
 
 
 
@@ -106,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
             headers.get(t).setText(head_today);
 
             //Текст под датами
+
+
             int day = t + 1;
             today_text = textViews.get(t);
             new GetData(this, today_text, day).execute();
