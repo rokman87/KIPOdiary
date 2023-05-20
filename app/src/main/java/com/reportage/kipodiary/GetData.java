@@ -5,13 +5,14 @@ import android.os.AsyncTask;
 import android.text.Html;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -19,19 +20,19 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-
-public class GetData extends AsyncTask<String, Void, String> {
+public class GetData extends AsyncTask<Void, Void, String[]> {
 
     private Context context;
     private TextView text;
     private int id = 1; //1 = Сегодня, 2= Завтра
+    private String[] myArray;
 
-    public GetData(Context context, TextView text,int day) {
+    public GetData(Context context, TextView text,int day, String[] maArray) {
 
         this.context= context;
         this.text= text;
         this.id= day;
-
+        this.myArray = maArray;
     }
 
     private static String convertStreamToString(InputStream is) {
@@ -57,63 +58,74 @@ public class GetData extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground (String... arg0) {
+    protected String[] doInBackground(Void... params) {
 
-        String response;
         try {
-                // Первый день недели
-                Calendar calFirstDay = Calendar.getInstance();
-                calFirstDay.set(Calendar.DAY_OF_WEEK, calFirstDay.getFirstDayOfWeek());
-                Date firstDayOfWeek = calFirstDay.getTime();
-                String firstDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(firstDayOfWeek);
+            // Первый день недели
+            Calendar calFirstDay = Calendar.getInstance();
+            calFirstDay.set(Calendar.DAY_OF_WEEK, calFirstDay.getFirstDayOfWeek());
+            Date firstDayOfWeek = calFirstDay.getTime();
+            String firstDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(firstDayOfWeek);
 
-                //Последний день недели
-                Calendar calLastDay = Calendar.getInstance();
-                calLastDay.set(Calendar.DAY_OF_WEEK, calLastDay.getFirstDayOfWeek() + 6);
-                Date lastDayOfWeek = calLastDay.getTime();
-                String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
-                //Объединяем
-                String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
+            //Последний день недели
+            Calendar calLastDay = Calendar.getInstance();
+            calLastDay.set(Calendar.DAY_OF_WEEK, calLastDay.getFirstDayOfWeek() + 6);
+            Date lastDayOfWeek = calLastDay.getTime();
+            String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
+            //Объединяем
+            String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
 
-            URL url = new URL("http://mrnikkly.beget.tech/getschedule.php"); // URL-адрес PHP-скрипта
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
 
-            OutputStream os = connection.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write("id=" + id + "&weekData=" + weekData); // Здесь указываются параметры в формате "имя=значение&имя=значение"
-            writer.flush();
-            writer.close();
-            os.close();
 
-            connection.connect();
+        URL url = new URL("http://mrnikkly.beget.tech/api.php");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
 
-            int responseCode = connection.getResponseCode();
-            response = null;
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                InputStream is = connection.getInputStream();
-                response = convertStreamToString(is);
-                is.close();
-            }
+        // Добавляем параметры, если нужно
+        String postData = "id=" + id + "&weekData=" + weekData;
+        OutputStream os = conn.getOutputStream();
+        os.write(postData.getBytes("UTF-8"));
+        os.flush();
+        os.close();
 
-            connection.disconnect();
-
+        InputStream in = new BufferedInputStream(conn.getInputStream());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        String response = "";
+        String line = "";
+        while ((line = reader.readLine()) != null) {
+            response += line;
         }
+        in.close();
+
+        // Преобразуем полученную строку в JSON-объект
+        JSONObject jsonObject = new JSONObject(response);
+
+        // Извлекаем данные из объекта JSON
+        String lesson_number = jsonObject.getString("Пара");
+        String lesson_time = jsonObject.getString("Время");
+        String building = jsonObject.getString("Корпус");
+        String auditorium = jsonObject.getString("Аудитория");
+        String discipline = jsonObject.getString("Дисциплина");
+        String teacher = jsonObject.getString("Преподаватель");
+        String[] myArray = new String[]{lesson_number,lesson_time,building,auditorium,discipline,teacher};
+        conn.disconnect();
+    }
+
 
         //При ошибке в try
         catch (Exception e) {
-            return new String("Exception: " + e.getMessage());
+            return new String[]{new String("Exception: " + e.getMessage())};
         }
-
-        return response;
+return myArray;
     }
 
     //Вывод
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(String[] result) {
 
-        this.text.setText(Html.fromHtml(result));
+        this.text.setText(Html.fromHtml(String.valueOf(result)));
     }
 
 }

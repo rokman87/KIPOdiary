@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
 
             int day = t + 1;
             today_text = textViews.get(t);
-            new GetData(this, today_text, day).execute();
+            String[] myArray = new String[]{"Элемент 1", "Элемент 2", "Элемент 3"};
+            new GetData(this, today_text, day, myArray).execute();
 
         }
 
