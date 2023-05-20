@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private TextView today_text, today_head_date;
+    private TextView today_text, today_head_date, tTime, tDiscipline, tAuditorium, tTeacher;
     private int num;
 
     @SuppressLint("MissingInflatedId")
@@ -49,24 +51,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LinearLayout linearLayout = findViewById(R.id.linear_layout); // получаем корневой элемент макета
+        View paraDayView = getLayoutInflater().inflate(R.layout.para_day, null); // получаем макет para_day.xml
+        linearLayout.addView(paraDayView); // добавляем макет para_day.xml к корневому макету
 
         ArrayList<TextView> headers = new ArrayList<>();
         headers.add((TextView) findViewById(R.id.monday_head_date_view));
-        headers.add((TextView) findViewById(R.id.tuesday_head_date_view));
-        headers.add((TextView) findViewById(R.id.wednesday_head_date_view));
-        headers.add((TextView) findViewById(R.id.thursday_head_date_view));
-        headers.add((TextView) findViewById(R.id.friday_head_date_view));
-        headers.add((TextView) findViewById(R.id.saturday_head_date_view));
-        headers.add((TextView) findViewById(R.id.sunday_head_date_view));
 
         ArrayList<TextView> textViews = new ArrayList<>();
-        textViews.add((TextView) findViewById(R.id.monday_text_view));
-        textViews.add((TextView) findViewById(R.id.tuesday_text_view));
-        textViews.add((TextView) findViewById(R.id.wednesday_text_view));
-        textViews.add((TextView) findViewById(R.id.thursday_text_view));
-        textViews.add((TextView) findViewById(R.id.friday_text_view));
-        textViews.add((TextView) findViewById(R.id.saturday_text_view));
-        textViews.add((TextView) findViewById(R.id.sunday_text_view));
+        textViews.add((TextView) findViewById(R.id.monday_text_time));
+        textViews.add((TextView) findViewById(R.id.monday_text_discipline));
+        textViews.add((TextView) findViewById(R.id.monday_text_auditorium));
+        textViews.add((TextView) findViewById(R.id.monday_text_teacher));
 
 
 
@@ -108,9 +104,15 @@ public class MainActivity extends AppCompatActivity {
 
 
             int day = t + 1;
+
+                tTime = textViews.get(0);
+                tDiscipline = textViews.get(1);
+                tAuditorium = textViews.get(3);
+                tTeacher = textViews.get(2);
+
             today_text = textViews.get(t);
-            String[] myArray = new String[]{"Элемент 1", "Элемент 2", "Элемент 3"};
-            new GetData(this, today_text, day, myArray).execute();
+            String[] myArray = new String[]{"Ничего","Ничего","Ничего","Ничего","Ничего","Ничего"};
+            new GetData(this, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray).execute();
 
         }
 

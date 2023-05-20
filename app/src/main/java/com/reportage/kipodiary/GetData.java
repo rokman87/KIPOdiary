@@ -23,14 +23,20 @@ import java.util.Date;
 public class GetData extends AsyncTask<Void, Void, String[]> {
 
     private Context context;
-    private TextView text;
+    private TextView textTime;
+    private TextView textDiscipline;
+    private TextView textAuditorium;
+    private TextView textTeacher;
     private int id = 1; //1 = Сегодня, 2= Завтра
     private String[] myArray;
 
-    public GetData(Context context, TextView text,int day, String[] maArray) {
+    public GetData(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium,TextView tTeacher, int day, String[] maArray) {
 
         this.context= context;
-        this.text= text;
+        this.textTime= tTime;
+        this.textDiscipline= tDiscipline;
+        this.textAuditorium= tAuditorium;
+        this.textTeacher= tTeacher;
         this.id= day;
         this.myArray = maArray;
     }
@@ -103,13 +109,12 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
         JSONObject jsonObject = new JSONObject(response);
 
         // Извлекаем данные из объекта JSON
-        String lesson_number = jsonObject.getString("Пара");
         String lesson_time = jsonObject.getString("Время");
         String building = jsonObject.getString("Корпус");
         String auditorium = jsonObject.getString("Аудитория");
         String discipline = jsonObject.getString("Дисциплина");
         String teacher = jsonObject.getString("Преподаватель");
-        String[] myArray = new String[]{lesson_number,lesson_time,building,auditorium,discipline,teacher};
+        myArray = new String[]{lesson_time,building + " " + auditorium,discipline,teacher};
         conn.disconnect();
     }
 
@@ -124,8 +129,10 @@ return myArray;
     //Вывод
     @Override
     protected void onPostExecute(String[] result) {
-
-        this.text.setText(Html.fromHtml(String.valueOf(result)));
+        this.textTime.setText(Html.fromHtml(myArray[0]));
+        this.textDiscipline.setText(Html.fromHtml(myArray[2]));
+        this.textAuditorium.setText(Html.fromHtml(myArray[3]));
+        this.textTeacher.setText(Html.fromHtml(myArray[1]));
     }
 
 }
