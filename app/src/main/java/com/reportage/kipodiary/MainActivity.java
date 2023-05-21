@@ -20,6 +20,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private String lessonCount;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView today_text, today_head_date, tTime, tDiscipline, tAuditorium, tTeacher;
     private int num;
 
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,27 +72,30 @@ public class MainActivity extends AppCompatActivity {
             num = num + 1;
         }
 
-
         for (int t = 0; t < headers.size(); t++) {
+
             //Получение дня недели
             Date today_date = new Date();
             today_date = new Date(today_date.getTime() + ((86400000) * t) - ((86400000) * num));
+
             //Преобразование в простой формат даты
             String date_str = new SimpleDateFormat("dd-MM-yyyy").format(today_date);
+
             //День недели
             String weekday = new SimpleDateFormat("EEEE").format(today_date);
             weekday = weekday.substring(0, 1).toUpperCase() + weekday.substring(1);
+
             //Строки текста заголовков
             String head_today = weekday + " " + date_str;
+
             //Обозначение переменных хэдеров
             today_head_date = headers.get(t);
             headers.get(t).setText(head_today);
             int day = t + 1;
+
             int lessonCount = 1;
 
-
-
-
+            new ClassSchedule(this,day).execute();
 
             for (int count = 0; count < lessonCount; count++) {
                 // Добавление первого макета "para_day.xml"
@@ -122,5 +129,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void onRequestCompleted(String result) {
+        // обновление интерфейса с использованием результата запроса
+        lessonCount = result.toString();
     }
 }

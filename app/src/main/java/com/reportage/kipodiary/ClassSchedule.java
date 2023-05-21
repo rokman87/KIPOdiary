@@ -2,10 +2,9 @@ package com.reportage.kipodiary;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -14,24 +13,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ClassSchedule extends AsyncTask<String, Integer, String> {
-
+public class ClassSchedule extends AsyncTask<String, Void, String> {
     private Context context;
-
-    private  int lessonCount;
     private int id = 1;
+    private int lCount =1;
 
-    public ClassSchedule(Context context, int day, int count) {
-
-        this.context= context;
-        this.id= day;
-        this.lessonCount = count;
+    public ClassSchedule(MainActivity mainActivity, int day) {
     }
 
-    @Override
-    protected String doInBackground(String... arg0) {
 
-        String response;
+    protected String doInBackground(String... urls) {
+        this.context= context;
         try {
             // Первый день недели
             Calendar calFirstDay = Calendar.getInstance();
@@ -47,7 +39,7 @@ public class ClassSchedule extends AsyncTask<String, Integer, String> {
             //Объединяем
             String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
 
-
+            // выполнение запроса на сервер
             URL url = new URL("http://mrnikkly.beget.tech/get_schedule_count.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -55,35 +47,30 @@ public class ClassSchedule extends AsyncTask<String, Integer, String> {
             conn.setDoInput(true);
 
             // Добавляем параметры, если нужно
-            String postData = "id=" + id + "&weekData=" + weekData + "&lCount=" + lessonCount;
+            String postData = "id=" + id + "&weekData=" + weekData + "&lCount=" +lCount;
             OutputStream os = conn.getOutputStream();
             os.write(postData.getBytes("UTF-8"));
             os.flush();
             os.close();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder result = new StringBuilder();
+            String line;
 
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            response = "";
-            String line = "";
             while ((line = reader.readLine()) != null) {
-                response += line;
+                result.append(line);
             }
-            in.close();
-            conn.disconnect();
-        }
 
-
-        //При ошибке в try
-        catch (Exception e) {
-            return new String("Exception: " + e.getMessage());
+            return result.toString();
+        } catch (Exception e) {
+            Log.e("RequestTask", "Exception", e);
+            return null;
         }
-        return response.toString();
     }
 
-    //Вывод
-    @Override
     protected void onPostExecute(String result) {
-
+        // передача результата в MainActivity
+        if (result != null) {
+            ((MainActivity) context).onRequestCompleted(result);
+        }
     }
 }
-
