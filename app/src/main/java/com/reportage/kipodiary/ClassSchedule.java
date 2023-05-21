@@ -1,22 +1,37 @@
 package com.reportage.kipodiary;
 
+import android.content.Context;
+import android.os.AsyncTask;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ClassSchedule {
+public class ClassSchedule extends AsyncTask<String, Integer, String> {
 
-    public ClassSchedule(int day) {
+    private Context context;
+
+    private  int lessonCount;
+    private int id = 1;
+
+    public ClassSchedule(Context context, int day, int count) {
+
+        this.context= context;
+        this.id= day;
+        this.lessonCount = count;
     }
 
-    public int getClassesCount(int day) {
+    @Override
+    protected String doInBackground(String... arg0) {
 
-        int classesCount = 0;
-
+        String response;
         try {
             // Первый день недели
             Calendar calFirstDay = Calendar.getInstance();
@@ -32,35 +47,43 @@ public class ClassSchedule {
             //Объединяем
             String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
 
-            // создаем ссылку на ваш PHP-скрипт на сервере
-            URL url = new URL("http://mrnikkly.beget.tech/get_schedule_count.php?day=" + day + "&weekData=" + weekData);
 
-            // создаем соединение с PHP-скриптом
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setDoOutput(true);
-            connection.connect();
+            URL url = new URL("http://mrnikkly.beget.tech/get_schedule_count.php");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
 
-            // получаем ответ из PHP-скрипта
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
+            // Добавляем параметры, если нужно
+            String postData = "id=" + id + "&weekData=" + weekData + "&lCount=" + lessonCount;
+            OutputStream os = conn.getOutputStream();
+            os.write(postData.getBytes("UTF-8"));
+            os.flush();
+            os.close();
+
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            response = "";
+            String line = "";
             while ((line = reader.readLine()) != null) {
-                response.append(line);
+                response += line;
             }
-            reader.close();
-
-            // преобразуем ответ из PHP-скрипта в число пар
-            classesCount = Integer.parseInt(response.toString());
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            in.close();
+            conn.disconnect();
         }
 
-        return classesCount;
 
+        //При ошибке в try
+        catch (Exception e) {
+            return new String("Exception: " + e.getMessage());
+        }
+        return response.toString();
     }
 
-    public void execute() {
+    //Вывод
+    @Override
+    protected void onPostExecute(String result) {
+
     }
 }
+

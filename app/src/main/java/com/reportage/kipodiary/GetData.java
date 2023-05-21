@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -22,6 +21,7 @@ import java.util.Date;
 
 public class GetData extends AsyncTask<Void, Void, String[]> {
 
+    private int lCount = 0;
     private Context context;
     private TextView textTime;
     private TextView textDiscipline;
@@ -30,7 +30,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
     private int id = 1; //1 = Сегодня, 2= Завтра
     private String[] myArray;
 
-    public GetData(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium,TextView tTeacher, int day, String[] maArray) {
+    public GetData(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, int day, String[] maArray, int count) {
 
         this.context= context;
         this.textTime= tTime;
@@ -39,28 +39,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
         this.textTeacher= tTeacher;
         this.id= day;
         this.myArray = maArray;
-    }
-
-    private static String convertStreamToString(InputStream is) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return sb.toString();
+        this.lCount=count;
     }
 
     @Override
@@ -90,7 +69,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
         conn.setDoInput(true);
 
         // Добавляем параметры, если нужно
-        String postData = "id=" + id + "&weekData=" + weekData;
+        String postData = "id=" + id + "&weekData=" + weekData + "&lCount=" +lCount;
         OutputStream os = conn.getOutputStream();
         os.write(postData.getBytes("UTF-8"));
         os.flush();
