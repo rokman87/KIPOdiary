@@ -12,6 +12,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,7 +26,50 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-    private String lessonCount;
+    private int lessonCount =2;
+
+
+    public class PostRequest {
+        private String url;
+        private String data;
+
+        public PostRequest(String url, String data) {
+            this.url = url;
+            this.data = data;
+        }
+
+        public int send() throws Exception {
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            // добавляем заголовки
+            con.setRequestMethod("POST");
+
+            // отправляем POST данные
+            con.setDoOutput(true);
+            con.setDoInput(true);
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(data);
+            wr.flush();
+            wr.close();
+
+
+            // получаем ответ
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // преобразуем ответ в число
+            int result = Integer.parseInt(response.toString());
+
+            return result;
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -67,24 +115,36 @@ public class MainActivity extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
-
         for (int i = dayOfWeek; i > 1; i--) {
             num = num + 1;
         }
+
+
+        // Первый день недели
+        Calendar calFirstDay = Calendar.getInstance();
+        calFirstDay.set(Calendar.DAY_OF_WEEK, calFirstDay.getFirstDayOfWeek());
+        Date firstDayOfWeek = calFirstDay.getTime();
+        String firstDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(firstDayOfWeek);
+        //Последний день недели
+        Calendar calLastDay = Calendar.getInstance();
+        calLastDay.set(Calendar.DAY_OF_WEEK, calLastDay.getFirstDayOfWeek() + 6);
+        Date lastDayOfWeek = calLastDay.getTime();
+        String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
+        //Объединяем
+        String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
+
+
 
         for (int t = 0; t < headers.size(); t++) {
 
             //Получение дня недели
             Date today_date = new Date();
             today_date = new Date(today_date.getTime() + ((86400000) * t) - ((86400000) * num));
-
             //Преобразование в простой формат даты
             String date_str = new SimpleDateFormat("dd-MM-yyyy").format(today_date);
-
             //День недели
             String weekday = new SimpleDateFormat("EEEE").format(today_date);
             weekday = weekday.substring(0, 1).toUpperCase() + weekday.substring(1);
-
             //Строки текста заголовков
             String head_today = weekday + " " + date_str;
 
@@ -93,11 +153,22 @@ public class MainActivity extends AppCompatActivity {
             headers.get(t).setText(head_today);
             int day = t + 1;
 
-            int lessonCount = 1;
+            new ClassSchedule(this,day,lessonCount).execute();
 
-            new ClassSchedule(this,day).execute();
 
-            for (int count = 0; count < lessonCount; count++) {
+            String url = "http://mrnikkly.beget.tech/get_schedule_count.php";
+            String data = "id=" + day + "&weekData=" + weekData;
+
+            PostRequest request = new PostRequest(url, data);
+            int result = 0;
+            try {
+                result = request.send();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+
+            for (int count = 0; count < result; count++) {
                 // Добавление первого макета "para_day.xml"
                 View paraDayView = getLayoutInflater().inflate(R.layout.para_day, null);
                 TextView auditoriumTextView = paraDayView.findViewById(R.id.text_auditorium);
@@ -131,8 +202,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onRequestCompleted(String result) {
+    public void onRequestCompleted(Integer result) {
         // обновление интерфейса с использованием результата запроса
-        lessonCount = result.toString();
+        lessonCount = result;
     }
 }

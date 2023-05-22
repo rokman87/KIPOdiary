@@ -13,17 +13,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ClassSchedule extends AsyncTask<String, Void, String> {
+public class ClassSchedule extends AsyncTask<Integer, Void, String> {
     private Context context;
     private int id = 1;
     private int lCount =1;
 
-    public ClassSchedule(MainActivity mainActivity, int day) {
+    public ClassSchedule(Context context, int day, int lessonCount) {
+        this.context= context;
+        this.id= day;
+        this.lCount =lessonCount;
     }
 
 
-    protected String doInBackground(String... urls) {
-        this.context= context;
+    protected String doInBackground(Integer... arg0) {
         try {
             // Первый день недели
             Calendar calFirstDay = Calendar.getInstance();
@@ -70,7 +72,7 @@ public class ClassSchedule extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         // передача результата в MainActivity
         if (result != null) {
-            ((MainActivity) context).onRequestCompleted(result);
+            ((MainActivity) context).onRequestCompleted(Integer.valueOf(result));
         }
     }
 }
