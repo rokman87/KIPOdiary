@@ -33,13 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     public class PostRequest extends AsyncTask<Void, Void, Integer> {
+
         private String url;
         private String data;
-        public int lessonCount;
+        private int lessonCount;
+        private int day;
+        private Context context;
 
-        public PostRequest(String url, String data) {
+
+        public PostRequest(Context context, String url, String data, int day) {
             this.url = url;
             this.data = data;
+            this.day = day;
+            this.context = context;
         }
 
         @Override
@@ -83,6 +89,39 @@ public class MainActivity extends AppCompatActivity {
 
             this.lessonCount = result;
             System.out.println("lessonCount: " + lessonCount);
+
+
+            LinearLayout linearLayout = findViewById(R.id.linear_layout); // получаем корневой элемент макета
+            for (int count = 0; count < lessonCount; count++) {
+                // Добавление первого макета "para_day.xml"
+                View paraDayView = getLayoutInflater().inflate(R.layout.para_day, null);
+                TextView auditoriumTextView = paraDayView.findViewById(R.id.text_auditorium);
+                auditoriumTextView.setText("Аудитория");
+                TextView timeTextView = paraDayView.findViewById(R.id.text_time);
+                timeTextView.setText("Время");
+                TextView disciplineTextView = paraDayView.findViewById(R.id.text_discipline);
+                disciplineTextView.setText("Дисциплина");
+                TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
+                teacherTextView.setText("Преподаватель");
+                linearLayout.addView(paraDayView);
+
+                //лист подписей
+                ArrayList<TextView> textViews = new ArrayList<>();
+                textViews.add((TextView) paraDayView.findViewById(R.id.text_time));
+                textViews.add((TextView) paraDayView.findViewById(R.id.text_discipline));
+                textViews.add((TextView) paraDayView.findViewById(R.id.text_auditorium));
+                textViews.add((TextView) paraDayView.findViewById(R.id.text_teacher));
+
+                //Текст под датами
+
+                tTime = textViews.get(0);
+                tDiscipline = textViews.get(1);
+                tAuditorium = textViews.get(3);
+                tTeacher = textViews.get(2);
+                String[] myArray = new String[]{"Ничего", "Ничего", "Ничего", "Ничего", "Ничего", "Ничего"};
+                //Запрос к гетдата
+                new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count).execute();
+            }
         }
     }
 
@@ -120,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LinearLayout linearLayout = findViewById(R.id.linear_layout); // получаем корневой элемент макета
+
 
         //лист хедеров
         ArrayList<TextView> headers = new ArrayList<>();
@@ -170,45 +209,13 @@ public class MainActivity extends AppCompatActivity {
             headers.get(t).setText(head_today);
             int day = t + 1;
 
-            //new ClassSchedule(this,day,lessonCount).execute();
 
 
             String url = "http://mrnikkly.beget.tech/get_schedule_count.php";
             String data = "id=" + day + "&weekData=" + weekData;
 
-            PostRequest postRequest = new PostRequest(url, data);
+            PostRequest postRequest = new PostRequest(this,url, data, day);
             postRequest.execute();
-
-            for (int count = 0; count < lessonCount; count++) {
-                // Добавление первого макета "para_day.xml"
-                View paraDayView = getLayoutInflater().inflate(R.layout.para_day, null);
-                TextView auditoriumTextView = paraDayView.findViewById(R.id.text_auditorium);
-                auditoriumTextView.setText("Аудитория");
-                TextView timeTextView = paraDayView.findViewById(R.id.text_time);
-                timeTextView.setText("Время");
-                TextView disciplineTextView = paraDayView.findViewById(R.id.text_discipline);
-                disciplineTextView.setText("Дисциплина");
-                TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
-                teacherTextView.setText("Преподаватель");
-                linearLayout.addView(paraDayView);
-
-                //лист подписей
-                ArrayList<TextView> textViews = new ArrayList<>();
-                textViews.add((TextView) paraDayView.findViewById(R.id.text_time));
-                textViews.add((TextView) paraDayView.findViewById(R.id.text_discipline));
-                textViews.add((TextView) paraDayView.findViewById(R.id.text_auditorium));
-                textViews.add((TextView) paraDayView.findViewById(R.id.text_teacher));
-
-                //Текст под датами
-
-                tTime = textViews.get(0);
-                tDiscipline = textViews.get(1);
-                tAuditorium = textViews.get(3);
-                tTeacher = textViews.get(2);
-                String[] myArray = new String[]{"Ничего", "Ничего", "Ничего", "Ничего", "Ничего", "Ничего"};
-                //Запрос к гетдата
-                new GetData(this, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count).execute();
-            }
         }
 
     }
