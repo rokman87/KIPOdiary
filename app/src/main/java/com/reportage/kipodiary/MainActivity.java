@@ -5,16 +5,18 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -29,47 +31,61 @@ public class MainActivity extends AppCompatActivity {
     private int lessonCount =2;
 
 
-    public class PostRequest {
+    public class PostRequest extends AsyncTask<Void, Void, Integer> {
         private String url;
         private String data;
+        public int lessonCount;
 
         public PostRequest(String url, String data) {
             this.url = url;
             this.data = data;
         }
 
-        public int send() throws Exception {
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            try {
+                URL url = new URL("http://mrnikkly.beget.tech/get_schedule_count.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
 
-            // добавляем заголовки
-            con.setRequestMethod("POST");
+                // Добавляем параметры, если нужно
 
-            // отправляем POST данные
-            con.setDoOutput(true);
-            con.setDoInput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(data);
-            wr.flush();
-            wr.close();
+                OutputStream os = conn.getOutputStream();
+                os.write(data.getBytes("UTF-8"));
+                os.flush();
+                os.close();
 
 
-            // получаем ответ
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                String response = "";
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    response += line;
+                }
+                in.close();
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+                // преобразуем ответ в число
+                int result = Integer.parseInt(response);
+                System.out.println("result: " + result);
+                return result;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return -1;
             }
-            in.close();
+        }
 
-            // преобразуем ответ в число
-            int result = Integer.parseInt(response.toString());
+        @Override
+        protected void onPostExecute(Integer result) {
 
-            return result;
+            this.lessonCount = result;
+            System.out.println("lessonCount: " + lessonCount);
         }
     }
+
+
 
     @Override
     protected void onResume() {
@@ -153,57 +169,17 @@ public class MainActivity extends AppCompatActivity {
             headers.get(t).setText(head_today);
             int day = t + 1;
 
-            new ClassSchedule(this,day,lessonCount).execute();
+            //new ClassSchedule(this,day,lessonCount).execute();
 
 
             String url = "http://mrnikkly.beget.tech/get_schedule_count.php";
             String data = "id=" + day + "&weekData=" + weekData;
 
-            PostRequest request = new PostRequest(url, data);
-            int result = 0;
-            try {
-                result = request.send();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-
-            for (int count = 0; count < result; count++) {
-                // Добавление первого макета "para_day.xml"
-                View paraDayView = getLayoutInflater().inflate(R.layout.para_day, null);
-                TextView auditoriumTextView = paraDayView.findViewById(R.id.text_auditorium);
-                auditoriumTextView.setText("Аудитория");
-                TextView timeTextView = paraDayView.findViewById(R.id.text_time);
-                timeTextView.setText("Время");
-                TextView disciplineTextView = paraDayView.findViewById(R.id.text_discipline);
-                disciplineTextView.setText("Дисциплина");
-                TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
-                teacherTextView.setText("Преподаватель");
-                linearLayout.addView(paraDayView);
-
-                //лист подписей
-                ArrayList<TextView> textViews = new ArrayList<>();
-                textViews.add((TextView) paraDayView.findViewById(R.id.text_time));
-                textViews.add((TextView) paraDayView.findViewById(R.id.text_discipline));
-                textViews.add((TextView) paraDayView.findViewById(R.id.text_auditorium));
-                textViews.add((TextView) paraDayView.findViewById(R.id.text_teacher));
-
-                //Текст под датами
-
-                tTime = textViews.get(0);
-                tDiscipline = textViews.get(1);
-                tAuditorium = textViews.get(3);
-                tTeacher = textViews.get(2);
-                String[] myArray = new String[]{"Ничего", "Ничего", "Ничего", "Ничего", "Ничего", "Ничего"};
-                //Запрос к гетдата
-                new GetData(this, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count).execute();
-            }
+            PostRequest postRequest = new PostRequest(url, data);
+            postRequest.execute();
         }
 
     }
 
-    public void onRequestCompleted(Integer result) {
-        // обновление интерфейса с использованием результата запроса
-        lessonCount = result;
-    }
+
 }

@@ -69,10 +69,5 @@ public class ClassSchedule extends AsyncTask<Integer, Void, String> {
         }
     }
 
-    protected void onPostExecute(String result) {
-        // передача результата в MainActivity
-        if (result != null) {
-            ((MainActivity) context).onRequestCompleted(Integer.valueOf(result));
-        }
-    }
+
 }
