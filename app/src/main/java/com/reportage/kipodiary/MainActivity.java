@@ -34,18 +34,21 @@ public class MainActivity extends AppCompatActivity {
 
     public class PostRequest extends AsyncTask<Void, Void, Integer> {
 
+        private final TextView today_head_date;
         private String url;
         private String data;
         private int lessonCount;
         private int day;
         private Context context;
+        private LinearLayout linearLayout;
 
 
-        public PostRequest(Context context, String url, String data, int day) {
+        public PostRequest(Context context, String url, String data, int day, TextView today_head_date) {
             this.url = url;
             this.data = data;
             this.day = day;
             this.context = context;
+            this.today_head_date= today_head_date;
         }
 
         @Override
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        @SuppressLint("WrongViewCast")
         @Override
         protected void onPostExecute(Integer result) {
 
@@ -91,7 +95,32 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("lessonCount: " + lessonCount);
 
 
-            LinearLayout linearLayout = findViewById(R.id.linear_layout); // получаем корневой элемент макета
+            System.out.println("day: " + day);
+            switch (day){
+                case 1:
+                    linearLayout = findViewById(R.id.linear_layout1);
+                    break;
+                case 2:
+                    linearLayout = findViewById(R.id.linear_layout2);
+                    break;
+                case 3:
+                    linearLayout = findViewById(R.id.linear_layout3);
+                    break;
+                case 4:
+                    linearLayout = findViewById(R.id.linear_layout4);
+                    break;
+                case 5:
+                    linearLayout = findViewById(R.id.linear_layout5);
+                    break;
+                case 6:
+                    linearLayout = findViewById(R.id.linear_layout6);
+                    break;
+                case 7:
+                    linearLayout = findViewById(R.id.linear_layout7);
+                    break;
+            }
+            
+            // получаем корневой элемент макета
             for (int count = 0; count < lessonCount; count++) {
                 // Добавление первого макета "para_day.xml"
                 View paraDayView = getLayoutInflater().inflate(R.layout.para_day, null);
@@ -150,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private TextView today_text, today_head_date, tTime, tDiscipline, tAuditorium, tTeacher;
+    private TextView today_head_date, tTime, tDiscipline, tAuditorium, tTeacher;
     private int num;
 
 
@@ -164,6 +193,12 @@ public class MainActivity extends AppCompatActivity {
         //лист хедеров
         ArrayList<TextView> headers = new ArrayList<>();
         headers.add((TextView) findViewById(R.id.monday_head_date_view));
+        headers.add((TextView) findViewById(R.id.tuesday_head_date_view));
+        headers.add((TextView) findViewById(R.id.wednesday_head_date_view));
+        headers.add((TextView) findViewById(R.id.thursday_head_date_view));
+        headers.add((TextView) findViewById(R.id.friday_head_date_view));
+        headers.add((TextView) findViewById(R.id.saturday_head_date_view));
+        headers.add((TextView) findViewById(R.id.sunday_head_date_view));
 
 
         //Номер дня недели
@@ -214,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
             String url = "http://mrnikkly.beget.tech/get_schedule_count.php";
             String data = "id=" + day + "&weekData=" + weekData;
 
-            PostRequest postRequest = new PostRequest(this,url, data, day);
+            PostRequest postRequest = new PostRequest(this,url, data, day,today_head_date);
             postRequest.execute();
         }
 
