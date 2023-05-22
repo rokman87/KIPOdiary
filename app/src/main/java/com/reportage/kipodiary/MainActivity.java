@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -177,6 +178,37 @@ public class MainActivity extends AppCompatActivity {
 
             PostRequest postRequest = new PostRequest(url, data);
             postRequest.execute();
+
+            for (int count = 0; count < lessonCount; count++) {
+                // Добавление первого макета "para_day.xml"
+                View paraDayView = getLayoutInflater().inflate(R.layout.para_day, null);
+                TextView auditoriumTextView = paraDayView.findViewById(R.id.text_auditorium);
+                auditoriumTextView.setText("Аудитория");
+                TextView timeTextView = paraDayView.findViewById(R.id.text_time);
+                timeTextView.setText("Время");
+                TextView disciplineTextView = paraDayView.findViewById(R.id.text_discipline);
+                disciplineTextView.setText("Дисциплина");
+                TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
+                teacherTextView.setText("Преподаватель");
+                linearLayout.addView(paraDayView);
+
+                //лист подписей
+                ArrayList<TextView> textViews = new ArrayList<>();
+                textViews.add((TextView) paraDayView.findViewById(R.id.text_time));
+                textViews.add((TextView) paraDayView.findViewById(R.id.text_discipline));
+                textViews.add((TextView) paraDayView.findViewById(R.id.text_auditorium));
+                textViews.add((TextView) paraDayView.findViewById(R.id.text_teacher));
+
+                //Текст под датами
+
+                tTime = textViews.get(0);
+                tDiscipline = textViews.get(1);
+                tAuditorium = textViews.get(3);
+                tTeacher = textViews.get(2);
+                String[] myArray = new String[]{"Ничего", "Ничего", "Ничего", "Ничего", "Ничего", "Ничего"};
+                //Запрос к гетдата
+                new GetData(this, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count).execute();
+            }
         }
 
     }
