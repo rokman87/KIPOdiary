@@ -108,7 +108,10 @@ return myArray;
     //Вывод
     @Override
     protected void onPostExecute(String[] result) {
-        this.textTime.setText(Html.fromHtml(myArray[0]));
+        String time = myArray[0];
+        String[] timeParts = time.split("-");
+        String formattedTime = "<b>" + timeParts[0] + "</b><br>" + timeParts[1];
+        this.textTime.setText(Html.fromHtml(formattedTime));
         this.textDiscipline.setText(Html.fromHtml(myArray[2]));
         this.textAuditorium.setText(Html.fromHtml(myArray[3]));
         this.textTeacher.setText(Html.fromHtml(myArray[1]));

@@ -2,48 +2,61 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:textColor="@color/mainText"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/text_auditorium"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_discipline"
-        android:layout_alignBottom="@+id/text_time"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="0dp"
         android:layout_toEndOf="@+id/text_time"
         android:padding="4dp"
-        android:text="Аудитория" />
+        android:text="Аудитория"
+        android:textColor="@color/secondText" />
 
 
     <TextView
         android:id="@+id/text_time"
         android:layout_width="wrap_content"
         android:layout_height="55dp"
-        android:padding="4dp"
-        android:text="Время" />
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:background="@color/white"
+        android:drawableRight="@drawable/right_border"
+        android:fontFamily="@font/montserrat_bold"
+        android:padding="5dp"
+        android:text="Время"
+        android:textColor="@color/mainText"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/text_discipline"
         android:layout_width="212dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toStartOf="@+id/text_teacher"
         android:layout_toEndOf="@+id/text_time"
+        android:fontFamily="@font/montserrat_bold"
         android:padding="4dp"
-        android:text="Дисциплина" />
+        android:text="Дисциплина"
+        android:textColor="@color/topBorder" />
 
     <TextView
         android:id="@+id/text_teacher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_toEndOf="@+id/text_discipline"
+        android:layout_marginEnd="-1dp"
         android:padding="4dp"
-        android:text="Преподаватель" />
+        android:text="Преподаватель"
+        android:textColor="@color/secondText" />
 
 
 </RelativeLayout>
