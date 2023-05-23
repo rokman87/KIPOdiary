@@ -21,6 +21,7 @@ import java.util.Date;
 
 public class GetData extends AsyncTask<Void, Void, String[]> {
 
+    private final String selectedGroup;
     private int lCount = 0;
     private Context context;
     private TextView textTime;
@@ -30,7 +31,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
     private int id = 1; //1 = Сегодня, 2= Завтра
     private String[] myArray;
 
-    public GetData(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, int day, String[] maArray, int count) {
+    public GetData(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, int day, String[] maArray, int count, String selectedGroup) {
 
         this.context= context;
         this.textTime= tTime;
@@ -40,6 +41,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
         this.id= day;
         this.myArray = maArray;
         this.lCount=count;
+        this.selectedGroup= selectedGroup;
     }
 
     @Override
@@ -69,7 +71,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
         conn.setDoInput(true);
 
         // Добавляем параметры, если нужно
-        String postData = "id=" + id + "&weekData=" + weekData + "&lCount=" +lCount;
+        String postData = "id=" + id + "&weekData=" + weekData + "&lCount=" +lCount + "&group=" +selectedGroup;
         OutputStream os = conn.getOutputStream();
         os.write(postData.getBytes("UTF-8"));
         os.flush();
@@ -100,6 +102,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
 
         //При ошибке в try
         catch (Exception e) {
+
             return new String[]{new String("Exception: " + e.getMessage())};
         }
 return myArray;

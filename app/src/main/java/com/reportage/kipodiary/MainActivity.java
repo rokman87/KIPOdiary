@@ -1,10 +1,8 @@
 package com.reportage.kipodiary;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -93,10 +90,10 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Integer result) {
 
             this.lessonCount = result;
+
             System.out.println("lessonCount: " + lessonCount);
-
-
             System.out.println("day: " + day);
+
             switch (day){
                 case 1:
                     linearLayout = findViewById(R.id.linear_layout1);
@@ -149,35 +146,14 @@ public class MainActivity extends AppCompatActivity {
                 tAuditorium = textViews.get(3);
                 tTeacher = textViews.get(2);
                 String[] myArray = new String[]{"Ничего", "Ничего", "Ничего", "Ничего", "Ничего", "Ничего"};
+
+                //Получаю группу
+                SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+                String selectedGroup = sharedPreferences.getString("selected_group", "");
                 //Запрос к гетдата
-                new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count).execute();
+                new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count, selectedGroup).execute();
             }
         }
-    }
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isAppInBackground()) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    private boolean isAppInBackground() {
-        ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
-        if (!tasks.isEmpty()) {
-            ComponentName topActivity = tasks.get(0).topActivity;
-            if (!topActivity.getPackageName().equals(getPackageName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private TextView today_head_date, tTime, tDiscipline, tAuditorium, tTeacher;
@@ -190,9 +166,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Spinner spinner = findViewById(R.id.mySpinner);
-        new GetGroups(this, spinner).execute();
-
+        //Добавляю селектор
+        //Spinner spinner = findViewById(R.id.mySpinner);
+        //new GetGroups(this, spinner).execute();
 
         //лист хедеров
         ArrayList<TextView> headers = new ArrayList<>();
@@ -203,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
         headers.add((TextView) findViewById(R.id.friday_head_date_view));
         headers.add((TextView) findViewById(R.id.saturday_head_date_view));
         headers.add((TextView) findViewById(R.id.sunday_head_date_view));
-
 
         //Номер дня недели
         Date date = new Date();
@@ -249,9 +224,12 @@ public class MainActivity extends AppCompatActivity {
             int day = t + 1;
 
 
+            //Получаю группу
+            SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+            String selectedGroup = sharedPreferences.getString("selected_group", "");
 
             String url = "http://mrnikkly.beget.tech/get_schedule_count.php";
-            String data = "id=" + day + "&weekData=" + weekData;
+            String data = "id=" + day + "&weekData=" + weekData + "&group=" + selectedGroup;
 
             PostRequest postRequest = new PostRequest(this,url, data, day,today_head_date);
             postRequest.execute();
