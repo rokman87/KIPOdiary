@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,15 +23,12 @@ public class StartActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Получаем выбранный статус и группу
-                RadioGroup radioGroup = findViewById(R.id.status_group);
-                int selectedStatus = radioGroup.getCheckedRadioButtonId();
+                // Получаем выбранную группу
                 String selectedGroup = spinner.getSelectedItem().toString();
 
                 // Сохраняем выбранный статус и группу в SharedPreferences
                 SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putInt("selected_status", selectedStatus);
                 editor.putString("selected_group", selectedGroup);
                 editor.apply();
 
