@@ -227,34 +227,6 @@
                     android:background="@color/white" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_layout7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/headers">
-
-                <TextView
-
-                    android:id="@+id/sunday_head_date_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="0dp"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:padding="4dp"
-                    android:text="Воскресенье"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:background="@color/white" />
-            </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 

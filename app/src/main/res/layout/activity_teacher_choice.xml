@@ -4,6 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TeacherChoiceActivity">
+    tools:context=".StartActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/top_liner"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/topBorder">
+
+            <TextView
+                android:id="@+id/kipo_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Выберите ваше ФИО"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:gravity="center"/>
+        </RelativeLayout>
+
+        <Spinner
+            android:id="@+id/mySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="30dp"
+            android:dropDownVerticalOffset="60dp"/>
+
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="238dp"
+            android:layout_height="97dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Продолжить" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

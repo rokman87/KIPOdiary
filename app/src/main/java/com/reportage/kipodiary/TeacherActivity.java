@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,10 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
-
-
-    private Spinner mySpinner;
+public class TeacherActivity extends AppCompatActivity {
 
 
     public class PostRequest extends AsyncTask<Void, Void, Integer> {
@@ -52,14 +48,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Integer doInBackground(Void... voids) {
             try {
-                URL url = new URL("http://mrnikkly.beget.tech/get_schedule_count.php");
+                URL url = new URL("http://mrnikkly.beget.tech/get_schedule_count_teacher.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
 
                 // Добавляем параметры, если нужно
-
                 OutputStream os = conn.getOutputStream();
                 os.write(data.getBytes("UTF-8"));
                 os.flush();
@@ -91,9 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
             this.lessonCount = result;
 
-            System.out.println("lessonCount: " + lessonCount);
-            System.out.println("day: " + day);
-
             switch (day){
                 case 1:
                     linearLayout = findViewById(R.id.linear_layout1);
@@ -114,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     linearLayout = findViewById(R.id.linear_layout6);
                     break;
             }
-            
+
             // получаем корневой элемент макета
             for (int count = 0; count < lessonCount; count++) {
                 // Добавление первого макета "para_day.xml"
@@ -126,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 TextView disciplineTextView = paraDayView.findViewById(R.id.text_discipline);
                 disciplineTextView.setText("Дисциплина");
                 TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
-                teacherTextView.setText("Преподаватель");
+                teacherTextView.setText("Группа");
                 linearLayout.addView(paraDayView);
 
                 //лист подписей
@@ -146,9 +138,9 @@ public class MainActivity extends AppCompatActivity {
 
                 //Получаю группу
                 SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
-                String selectedGroup = sharedPreferences.getString("selected_group", "");
+                String selected_teacher = sharedPreferences.getString("selected_teacher", "");
                 //Запрос к гетдата
-                new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count, selectedGroup).execute();
+                new GetDataTeacher(context, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count, selected_teacher).execute();
             }
         }
     }
@@ -162,10 +154,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Добавляю селектор
-        //Spinner spinner = findViewById(R.id.mySpinner);
-        //new GetGroups(this, spinner).execute();
 
         //лист хедеров
         ArrayList<TextView> headers = new ArrayList<>();
@@ -222,10 +210,10 @@ public class MainActivity extends AppCompatActivity {
 
             //Получаю группу
             SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
-            String selectedGroup = sharedPreferences.getString("selected_group", "");
+            String selected_teacher = sharedPreferences.getString("selected_teacher", "");
 
-            String url = "http://mrnikkly.beget.tech/get_schedule_count.php";
-            String data = "id=" + day + "&weekData=" + weekData + "&group=" + selectedGroup;
+            String url = "http://mrnikkly.beget.tech/get_schedule_count_teacher.php";
+            String data = "id=" + day + "&weekData=" + weekData + "&teacher=" + selected_teacher;
 
             PostRequest postRequest = new PostRequest(this,url, data, day,today_head_date);
             postRequest.execute();
