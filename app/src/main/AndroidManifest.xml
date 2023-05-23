@@ -16,27 +16,30 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name=".TeacherChoiceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ClassSelectionActivity"
-            android:exported="true" >
+            android:name=".HelloActivity"
+            android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-    </activity>
+        </activity>
+        <activity
+            android:name=".TeacherChoiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ClassSelectionActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".StartActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".TeacherActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

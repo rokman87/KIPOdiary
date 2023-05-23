@@ -4,57 +4,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ClassSelectionActivity">
+    tools:context=".ClassSelectionActivity"
+    android:background="@color/brown">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="180dp"
+        android:layout_height="130dp"
+        android:background="@drawable/frame_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
 
-        <RelativeLayout
-            android:id="@+id/top_liner"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/topBorder">
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:text="Тип пользователя:"
+            app:layout_constraintBottom_toTopOf="@+id/status_group"
+            app:layout_constraintEnd_toEndOf="@+id/status_group"
+            app:layout_constraintStart_toStartOf="@+id/status_group"
+            tools:ignore="MissingConstraints"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/black"/>
 
-            <TextView
-                android:id="@+id/kipo_logo"
-                android:layout_width="wrap_content"
+        <RadioGroup
+            android:id="@+id/status_group"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center">
+
+            <RadioButton
+                android:id="@+id/student_radio"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="0dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Выберите кто вы в КИПО"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:gravity="center"/>
-        </RelativeLayout>
+                android:text="Студент" />
 
-    <RadioGroup
-        android:id="@+id/status_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/teacher_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Преподаватель" />
 
-        <RadioButton
-            android:id="@+id/student_radio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Студент"
-            android:padding="20dp"
-            android:fontFamily="@font/montserrat_bold"/>
+        </RadioGroup>
 
-        <RadioButton
-            android:id="@+id/teacher_radio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Преподаватель"
-            android:padding="20dp"
-            android:fontFamily="@font/montserrat_bold"/>
+    </RelativeLayout>
 
-    </RadioGroup>
-    </LinearLayout>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

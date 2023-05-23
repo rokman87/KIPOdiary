@@ -6,4 +6,5 @@
     <string name="thursday_header">Четверг</string>
     <string name="friday_header">Пятница</string>
     <string name="saturday_header">Суббота</string>
+    <string name="helloSpeach">Эта программа создана специально для студентов и преподавателей КИПО, чтобы облегчить ваши учебные будни.</string>
 </resources>
