@@ -63,7 +63,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
             String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
 
 
-            URL url = new URL("http://mrnikkly.beget.tech/api.php");
+            URL url = new URL("https://ginkel.ru/kipo/api.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);

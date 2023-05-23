@@ -27,7 +27,7 @@ public class GetGroups extends AsyncTask<Void, Void, String[]> {
     @Override
     protected String[] doInBackground(Void... params) {
         try {
-            URL url = new URL("http://mrnikkly.beget.tech/get_groups.php");
+            URL url = new URL("https://ginkel.ru/kipo/get_groups.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 

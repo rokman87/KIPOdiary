@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Integer doInBackground(Void... voids) {
             try {
-                URL url = new URL("http://mrnikkly.beget.tech/get_schedule_count.php");
+                URL url = new URL("https://ginkel.ru/kipo/get_schedule_count.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
             String selectedGroup = sharedPreferences.getString("selected_group", "");
 
-            String url = "http://mrnikkly.beget.tech/get_schedule_count.php";
+            String url = "https://ginkel.ru/kipo/get_schedule_count.php";
             String data = "id=" + day + "&weekData=" + weekData + "&group=" + selectedGroup;
 
             PostRequest postRequest = new PostRequest(this,url, data, day,today_head_date);

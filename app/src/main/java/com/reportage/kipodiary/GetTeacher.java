@@ -27,7 +27,7 @@ public class GetTeacher extends AsyncTask<Void, Void, String[]> {
     @Override
     protected String[] doInBackground(Void... params) {
         try {
-            URL url = new URL("http://mrnikkly.beget.tech/get_teacher.php");
+            URL url = new URL("https://ginkel.ru/kipo/get_teacher.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 

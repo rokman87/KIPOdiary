@@ -48,7 +48,7 @@ public class TeacherActivity extends AppCompatActivity {
         @Override
         protected Integer doInBackground(Void... voids) {
             try {
-                URL url = new URL("http://mrnikkly.beget.tech/get_schedule_count_teacher.php");
+                URL url = new URL("https://ginkel.ru/kipo/get_schedule_count_teacher.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
@@ -212,7 +212,7 @@ public class TeacherActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
             String selected_teacher = sharedPreferences.getString("selected_teacher", "");
 
-            String url = "http://mrnikkly.beget.tech/get_schedule_count_teacher.php";
+            String url = "https://ginkel.ru/kipo/get_schedule_count_teacher.php";
             String data = "id=" + day + "&weekData=" + weekData + "&teacher=" + selected_teacher;
 
             PostRequest postRequest = new PostRequest(this,url, data, day,today_head_date);

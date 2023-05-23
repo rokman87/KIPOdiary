@@ -64,7 +64,7 @@ public class GetDataTeacher extends AsyncTask<Void, Void, String[]> {
 
 
 
-            URL url = new URL("http://mrnikkly.beget.tech/api_teacher.php");
+            URL url = new URL("https://ginkel.ru/kipo/api_teacher.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
