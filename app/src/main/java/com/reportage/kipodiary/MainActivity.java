@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             Date today_date = new Date();
             today_date = new Date(today_date.getTime() + ((86400000) * t) - ((86400000) * num));
             //Преобразование в простой формат даты
-            String date_str = new SimpleDateFormat("dd-MM-yyyy").format(today_date);
+            String date_str = new SimpleDateFormat("dd.MM").format(today_date);
             //День недели
             String weekday = new SimpleDateFormat("EEEE").format(today_date);
             weekday = weekday.substring(0, 1).toUpperCase() + weekday.substring(1);

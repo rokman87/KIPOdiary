@@ -28,17 +28,25 @@
             android:textSize="24sp"
             android:gravity="center"/>
 
-        <!--<Spinner
-            android:id="@+id/mySpinner"
-            android:layout_width="200dp"
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="0dp" />
-            -->
+            android:layout_marginBottom="0dp"
+            android:layout_toEndOf="@+id/kipo_logo"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:padding="4dp"
+            android:text="Дата"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+
     </RelativeLayout>
 
 
@@ -53,20 +61,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="0dp"
-                android:fontFamily="@font/montserrat"
-                android:includeFontPadding="false"
-                android:padding="4dp"
-                android:text="Дата"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:gravity="center"/>
-
             <LinearLayout
                 android:id="@+id/linear_layout1"
                 android:layout_width="match_parent"
@@ -80,12 +74,21 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="0dp"
-                    android:fontFamily="@font/montserrat"
+                    android:fontFamily="@font/montserrat_bold"
                     android:includeFontPadding="false"
                     android:padding="4dp"
                     android:text="Понедельник"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:background="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -101,11 +104,19 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="0dp"
-                    android:fontFamily="@font/montserrat"
+                    android:fontFamily="@font/montserrat_bold"
                     android:padding="4dp"
                     android:text="Вторник"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:background="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -121,11 +132,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="0dp"
-                    android:fontFamily="@font/montserrat"
+                    android:fontFamily="@font/montserrat_bold"
                     android:padding="4dp"
                     android:text="Среда"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:background="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -141,11 +159,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="0dp"
-                    android:fontFamily="@font/montserrat"
+                    android:fontFamily="@font/montserrat_bold"
                     android:padding="4dp"
                     android:text="Четверг"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:background="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -161,11 +186,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="0dp"
-                    android:fontFamily="@font/montserrat"
+                    android:fontFamily="@font/montserrat_bold"
                     android:padding="4dp"
                     android:text="Пятница"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:background="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -181,11 +213,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="0dp"
-                    android:fontFamily="@font/montserrat"
+                    android:fontFamily="@font/montserrat_bold"
                     android:padding="4dp"
                     android:text="Суббота"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:background="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -202,11 +241,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="0dp"
-                    android:fontFamily="@font/montserrat"
+                    android:fontFamily="@font/montserrat_bold"
                     android:padding="4dp"
                     android:text="Воскресенье"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:background="@color/white" />
             </LinearLayout>
 
         </LinearLayout>
