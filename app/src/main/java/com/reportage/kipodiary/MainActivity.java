@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-    private int lessonCount =2;
+    private Spinner mySpinner;
 
 
     public class PostRequest extends AsyncTask<Void, Void, Integer> {
@@ -189,6 +190,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Spinner spinner = findViewById(R.id.mySpinner);
+        new GetGroups(this, spinner).execute();
+
 
         //лист хедеров
         ArrayList<TextView> headers = new ArrayList<>();
@@ -223,8 +227,8 @@ public class MainActivity extends AppCompatActivity {
         String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
         //Объединяем
         String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
-
-
+        //Устанавливаю дату в топ
+        ((TextView) findViewById(R.id.date)).setText(weekData);
 
         for (int t = 0; t < headers.size(); t++) {
 
