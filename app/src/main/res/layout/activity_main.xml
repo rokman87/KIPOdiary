@@ -30,16 +30,19 @@
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="283dp"
+            android:layout_height="32dp"
             android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp"
+            android:layout_marginStart="3dp"
+
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
             android:layout_toEndOf="@+id/kipo_logo"
             android:fontFamily="@font/montserrat_bold"
-            android:gravity="center"
+            android:gravity="center|end"
             android:includeFontPadding="false"
             android:padding="4dp"
             android:text="Дата"
@@ -80,7 +83,7 @@
                     android:text="Понедельник"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    />
+                    android:gravity="center"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -108,7 +111,8 @@
                     android:padding="4dp"
                     android:text="Вторник"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:gravity="center"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -136,7 +140,8 @@
                     android:padding="4dp"
                     android:text="Среда"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:gravity="center"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
@@ -163,7 +168,8 @@
                     android:padding="4dp"
                     android:text="Четверг"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:gravity="center"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
@@ -190,14 +196,16 @@
                     android:padding="4dp"
                     android:text="Пятница"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:gravity="center"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="0dp"
                     android:layout_marginEnd="0dp"
-                    android:background="@color/white" />
+                    android:background="@color/white"
+                    android:gravity="center"/>
             </LinearLayout>
 
             <LinearLayout
@@ -217,7 +225,8 @@
                     android:padding="4dp"
                     android:text="Суббота"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:gravity="center"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
