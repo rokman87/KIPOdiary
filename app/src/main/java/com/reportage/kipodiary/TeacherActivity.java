@@ -155,7 +155,7 @@ public class TeacherActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
                 String selected_teacher = sharedPreferences.getString("selected_teacher", "");
                 //Запрос к гетдата
-                new GetDataTeacher(context, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count, selected_teacher).execute();
+                new GetDataTeacher(context, tTime, tDiscipline, tAuditorium, tTeacher,tLessonId, day, myArray, count, selected_teacher).execute();
 
                 if (Objects.equals(password, "true")) {
                     paraDayView.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +166,7 @@ public class TeacherActivity extends AppCompatActivity {
                             // Получаем текст из TextView
                             TextView textLessonId = (TextView) paraDayView.findViewById(R.id.lesson_id);
                             String lesson_id = textLessonId.getText().toString();
-
+                            System.out.println("lesson_id: " + lesson_id);
                             // Передаем текст в Intent
                             intent.putExtra("lesson_id", lesson_id);
 

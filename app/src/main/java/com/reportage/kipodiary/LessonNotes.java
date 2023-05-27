@@ -1,7 +1,6 @@
 package com.reportage.kipodiary;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -15,12 +14,10 @@ public class LessonNotes extends AppCompatActivity {
         setContentView(R.layout.activity_lesson_notes);
 
 
-        // Получаем значение TextView из Intent
-        Intent intent = getIntent();
-        String textValue = intent.getStringExtra("textValue");
+        String lessonId = getIntent().getStringExtra("lesson_id");
 
 // Используем значение TextView
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) TextView textView = findViewById(R.id.textView);
-        textView.setText(textValue);
+        textView.setText(lessonId);
     }
 }
