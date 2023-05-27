@@ -16,20 +16,26 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".LessonNotes"
+            android:exported="false" />
+        <activity
+            android:name=".PasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".HelloActivity"
             android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".TeacherChoiceActivity"
             android:exported="false" />
         <activity
             android:name=".ClassSelectionActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".StartActivity"
             android:exported="true" />

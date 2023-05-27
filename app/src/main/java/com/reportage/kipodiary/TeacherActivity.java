@@ -37,6 +37,7 @@ public class TeacherActivity extends AppCompatActivity {
         private LinearLayout linearLayout;
 
 
+
         public PostRequest(Context context, String url, String data, int day, TextView today_head_date) {
             this.url = url;
             this.data = data;
@@ -110,7 +111,9 @@ public class TeacherActivity extends AppCompatActivity {
             // получаем корневой элемент макета
             for (int count = 0; count < lessonCount; count++) {
                 // Добавление первого макета "para_day.xml"
+
                 View paraDayView = getLayoutInflater().inflate(R.layout.para_day, null);
+
                 TextView auditoriumTextView = paraDayView.findViewById(R.id.text_auditorium);
                 auditoriumTextView.setText("Аудитория");
                 TextView timeTextView = paraDayView.findViewById(R.id.text_time);
@@ -120,6 +123,13 @@ public class TeacherActivity extends AppCompatActivity {
                 TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
                 teacherTextView.setText("Группа");
                 linearLayout.addView(paraDayView);
+                paraDayView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        System.out.println("Хуй");
+                    }
+                });
+
 
                 //лист подписей
                 ArrayList<TextView> textViews = new ArrayList<>();
@@ -208,7 +218,7 @@ public class TeacherActivity extends AppCompatActivity {
             int day = t + 1;
 
 
-            //Получаю группу
+            //Получаю
             SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
             String selected_teacher = sharedPreferences.getString("selected_teacher", "");
 

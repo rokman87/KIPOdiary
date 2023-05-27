@@ -32,10 +32,12 @@ public class TeacherChoiceActivity extends AppCompatActivity {
                 editor.putString("selected_teacher", selected_teacher);
                 editor.apply();
 
-                // Переходим на следующий экран
-                Intent intent = new Intent(TeacherChoiceActivity.this, TeacherActivity.class);
+                // Переходим на следующий экран и передаем выбранного преподавателя
+                Intent intent = new Intent(TeacherChoiceActivity.this, PasswordActivity.class);
+                intent.putExtra("selected_teacher", selected_teacher);
                 startActivity(intent);
             }
         });
+
     }
 }
