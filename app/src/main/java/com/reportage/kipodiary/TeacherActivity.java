@@ -131,19 +131,9 @@ public class TeacherActivity extends AppCompatActivity {
                 disciplineTextView.setText("Дисциплина");
                 TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
                 teacherTextView.setText("Группа");
+                TextView lessonIdTextView = paraDayView.findViewById(R.id.lesson_id);
+                teacherTextView.setText("id");
                 linearLayout.addView(paraDayView);
-
-
-
-                if (Objects.equals(password, "true")) {
-                    paraDayView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            System.out.println("Хуй");
-                        }
-                    });
-                }
-
 
                 //лист подписей
                 ArrayList<TextView> textViews = new ArrayList<>();
@@ -151,13 +141,14 @@ public class TeacherActivity extends AppCompatActivity {
                 textViews.add((TextView) paraDayView.findViewById(R.id.text_discipline));
                 textViews.add((TextView) paraDayView.findViewById(R.id.text_auditorium));
                 textViews.add((TextView) paraDayView.findViewById(R.id.text_teacher));
+                textViews.add((TextView) paraDayView.findViewById(R.id.lesson_id));
 
-                //Текст под датами
-
+                //Текст
                 tTime = textViews.get(0);
                 tDiscipline = textViews.get(1);
                 tAuditorium = textViews.get(3);
                 tTeacher = textViews.get(2);
+                tLessonId = textViews.get(4);
                 String[] myArray = new String[]{"Ничего", "Ничего", "Ничего", "Ничего", "Ничего", "Ничего"};
 
                 //Получаю группу
@@ -165,11 +156,30 @@ public class TeacherActivity extends AppCompatActivity {
                 String selected_teacher = sharedPreferences.getString("selected_teacher", "");
                 //Запрос к гетдата
                 new GetDataTeacher(context, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count, selected_teacher).execute();
+
+                if (Objects.equals(password, "true")) {
+                    paraDayView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(TeacherActivity.this, LessonNotes.class);
+
+                            // Получаем текст из TextView
+                            TextView textLessonId = (TextView) paraDayView.findViewById(R.id.lesson_id);
+                            String lesson_id = textLessonId.getText().toString();
+
+                            // Передаем текст в Intent
+                            intent.putExtra("lesson_id", lesson_id);
+
+                            // Запускаем новую активность
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
         }
     }
 
-    private TextView today_head_date, tTime, tDiscipline, tAuditorium, tTeacher;
+    private TextView today_head_date, tTime, tDiscipline, tAuditorium, tTeacher, tLessonId;
     private int num;
 
 
