@@ -2,6 +2,7 @@ package com.reportage.kipodiary;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class TeacherActivity extends AppCompatActivity {
 
@@ -108,6 +110,13 @@ public class TeacherActivity extends AppCompatActivity {
                     break;
             }
 
+            // Получаем Intent, который запустил эту Activity
+            Intent intent = getIntent();
+
+            // Получаем значение параметра "password"
+            String password = intent.getStringExtra("password");
+            System.out.println("password: " + password);
+
             // получаем корневой элемент макета
             for (int count = 0; count < lessonCount; count++) {
                 // Добавление первого макета "para_day.xml"
@@ -123,12 +132,17 @@ public class TeacherActivity extends AppCompatActivity {
                 TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
                 teacherTextView.setText("Группа");
                 linearLayout.addView(paraDayView);
-                paraDayView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        System.out.println("Хуй");
-                    }
-                });
+
+
+
+                if (Objects.equals(password, "true")) {
+                    paraDayView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            System.out.println("Хуй");
+                        }
+                    });
+                }
 
 
                 //лист подписей
