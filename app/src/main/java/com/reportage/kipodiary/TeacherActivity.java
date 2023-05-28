@@ -120,9 +120,7 @@ public class TeacherActivity extends AppCompatActivity {
             // получаем корневой элемент макета
             for (int count = 0; count < lessonCount; count++) {
                 // Добавление первого макета "para_day.xml"
-
                 View paraDayView = getLayoutInflater().inflate(R.layout.para_day, null);
-
                 TextView auditoriumTextView = paraDayView.findViewById(R.id.text_auditorium);
                 auditoriumTextView.setText("Аудитория");
                 TextView timeTextView = paraDayView.findViewById(R.id.text_time);
@@ -157,25 +155,34 @@ public class TeacherActivity extends AppCompatActivity {
                 //Запрос к гетдата
                 new GetDataTeacher(context, tTime, tDiscipline, tAuditorium, tTeacher,tLessonId, day, myArray, count, selected_teacher).execute();
 
-                if (Objects.equals(password, "true")) {
+
                     paraDayView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            if (Objects.equals(password, "true")) {
                             Intent intent = new Intent(TeacherActivity.this, LessonNotes.class);
-
                             // Получаем текст из TextView
                             TextView textLessonId = (TextView) paraDayView.findViewById(R.id.lesson_id);
                             String lesson_id = textLessonId.getText().toString();
-                            System.out.println("lesson_id: " + lesson_id);
                             // Передаем текст в Intent
                             intent.putExtra("lesson_id", lesson_id);
-
                             // Запускаем новую активность
                             startActivity(intent);
+                            }
+                            else{
+                                Intent intent = new Intent(TeacherActivity.this, CheckNotes.class);
+                                // Получаем текст из TextView
+                                TextView textLessonId = (TextView) paraDayView.findViewById(R.id.lesson_id);
+                                String lesson_id = textLessonId.getText().toString();
+                                // Передаем текст в Intent
+                                intent.putExtra("lesson_id", lesson_id);
+                                // Запускаем новую активность
+                                startActivity(intent);
+                            }
                         }
                     });
                 }
-            }
+
         }
     }
 

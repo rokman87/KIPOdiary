@@ -1,9 +1,11 @@
 package com.reportage.kipodiary;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -53,7 +55,9 @@ public class LessonNotes extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Обработка ответа от сервера
+                        Toast.makeText(LessonNotes.this, "Заметка добавлена", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LessonNotes.this, TeacherActivity.class);
+                        startActivity(intent);
                     }
                 },
                 new Response.ErrorListener() {

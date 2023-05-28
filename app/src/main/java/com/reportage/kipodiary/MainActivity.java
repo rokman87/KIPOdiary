@@ -2,6 +2,7 @@ package com.reportage.kipodiary;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -127,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
                 disciplineTextView.setText("Дисциплина");
                 TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
                 teacherTextView.setText("Преподаватель");
+                TextView lessonIdTextView = paraDayView.findViewById(R.id.lesson_id);
+                teacherTextView.setText("id");
                 linearLayout.addView(paraDayView);
 
                 //лист подписей
@@ -135,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 textViews.add((TextView) paraDayView.findViewById(R.id.text_discipline));
                 textViews.add((TextView) paraDayView.findViewById(R.id.text_auditorium));
                 textViews.add((TextView) paraDayView.findViewById(R.id.text_teacher));
+                textViews.add((TextView) paraDayView.findViewById(R.id.lesson_id));
 
                 //Текст под датами
 
@@ -142,18 +146,34 @@ public class MainActivity extends AppCompatActivity {
                 tDiscipline = textViews.get(1);
                 tAuditorium = textViews.get(3);
                 tTeacher = textViews.get(2);
+                tLessonId = textViews.get(4);
                 String[] myArray = new String[]{"Ничего", "Ничего", "Ничего", "Ничего", "Ничего", "Ничего"};
 
                 //Получаю группу
                 SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
                 String selectedGroup = sharedPreferences.getString("selected_group", "");
                 //Запрос к гетдата
-                new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, day, myArray, count, selectedGroup).execute();
+                new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, tLessonId, day, myArray, count, selectedGroup).execute();
+
+                paraDayView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, CheckNotes.class);
+                            // Получаем текст из TextView
+                            TextView textLessonId = (TextView) paraDayView.findViewById(R.id.lesson_id);
+                            String lesson_id = textLessonId.getText().toString();
+                            // Передаем текст в Intent
+                            intent.putExtra("lesson_id", lesson_id);
+                            // Запускаем новую активность
+                            startActivity(intent);
+                    }
+                });
+
             }
         }
     }
 
-    private TextView today_head_date, tTime, tDiscipline, tAuditorium, tTeacher;
+    private TextView today_head_date, tTime, tDiscipline, tAuditorium, tTeacher, tLessonId;
     private int num;
 
 

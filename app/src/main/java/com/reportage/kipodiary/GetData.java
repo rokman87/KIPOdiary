@@ -22,6 +22,7 @@ import java.util.Date;
 public class GetData extends AsyncTask<Void, Void, String[]> {
 
     private final String selectedGroup;
+    private TextView tLessonId;
     private int lCount = 0;
     private Context context;
     private TextView textTime;
@@ -31,7 +32,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
     private int id = 1; //1 = Сегодня, 2= Завтра
     private String[] myArray;
 
-    public GetData(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, int day, String[] maArray, int count, String selectedGroup) {
+    public GetData(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, TextView tLessonId, int day, String[] maArray, int count, String selectedGroup) {
 
         this.context = context;
         this.textTime = tTime;
@@ -42,6 +43,7 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
         this.myArray = maArray;
         this.lCount = count;
         this.selectedGroup = selectedGroup;
+        this.tLessonId=tLessonId;
     }
 
     @Override
@@ -95,20 +97,9 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
             String auditorium = jsonObject.getString("Аудитория");
             String discipline = jsonObject.getString("Дисциплина");
             String teacher = jsonObject.getString("Преподаватель");
-            if (!lesson_time.contains("ПЕРЕЕЗД")) {
-                myArray[0] = lesson_time;
-            }
-            if (!building.contains("ПЕРЕЕЗД ПЕРЕЕЗД")) {
-                myArray[1] = building + " " + auditorium;
-            }
-            if (!discipline.contains("ПЕРЕЕЗД")) {
-                myArray[2] = discipline;
-            }
-            if (!teacher.contains("ПЕРЕЕЗД")) {
-                myArray[3] = teacher;
-            }
+            String id = jsonObject.getString("id");
 
-            myArray = new String[]{lesson_time, building + " " + auditorium, discipline, teacher};
+            myArray = new String[]{lesson_time, building + " " + auditorium, discipline, teacher, id};
 
             conn.disconnect();
         }
@@ -137,6 +128,8 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
         this.textAuditorium.setText(Html.fromHtml(myArray[3]));
         //Преподаватель
         this.textTeacher.setText(Html.fromHtml(myArray[1]));
+
+        this.tLessonId.setText(Html.fromHtml(myArray[4]));
     }
 
 }
