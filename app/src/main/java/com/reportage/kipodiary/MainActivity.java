@@ -157,11 +157,8 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
                 String selectedGroup = sharedPreferences.getString("selected_group", "");
                 //Запрос к гетдата
-                new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, tLessonId, day, myArray, count, selectedGroup).execute();
-                TextView textLessonId = (TextView) paraDayView.findViewById(R.id.lesson_id);
-                String lesson_id = textLessonId.getText().toString();
-                System.out.println("lesson_id: " + lesson_id);
-                getNotesFromDataBase(paraDayView, lesson_id);
+                new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, tLessonId, day, myArray, count, selectedGroup, paraDayView).execute();
+
                 paraDayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -257,35 +254,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void getNotesFromDataBase(View paraDayView, String lesson_id) {
-        String url = "https://ginkel.ru/kipo/check_note_img_button.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("response: "+response);
-                        if(response == "true"){
-                            ImageView myImg = paraDayView.findViewById(R.id.imageViewButton);
-                            myImg.setVisibility(View.VISIBLE);
-                            System.out.println("Добавил кнопку");
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Обработка ошибки
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("lessonId", lesson_id);
-                return params;
-            }
-        };
-        Volley.newRequestQueue(this).add(stringRequest);
-    }
+
 
 
 }

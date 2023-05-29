@@ -3,7 +3,15 @@ package com.reportage.kipodiary;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.Html;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
@@ -17,23 +25,23 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class GetDataTeacher extends AsyncTask<Void, Void, String[]> {
 
     private final String selected_teacher;
-    private TextView tLessonId;
+    private final View paraDayView;
+    private TextView tLessonId, textTime, textDiscipline, textAuditorium, textTeacher;
     private int lCount = 0;
     private Context context;
-    private TextView textTime;
-    private TextView textDiscipline;
-    private TextView textAuditorium;
-    private TextView textTeacher;
     private int id = 1; //1 = Сегодня, 2= Завтра
     private String[] myArray;
 
-    public GetDataTeacher(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, TextView tLessonId, int day, String[] maArray, int count, String selected_teacher) {
-
+    public GetDataTeacher(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, TextView tLessonId, int day, String[] maArray, int count, String selected_teacher, View paraDayView) {
+        this.paraDayView=paraDayView;
         this.context= context;
         this.textTime= tTime;
         this.textDiscipline= tDiscipline;
@@ -98,6 +106,10 @@ public class GetDataTeacher extends AsyncTask<Void, Void, String[]> {
             String discipline = jsonObject.getString("Дисциплина");
             String teacher = jsonObject.getString("Группа");
             String id = jsonObject.getString("id");
+            //Отрабатываю кнопочку
+            String lessonId = id;
+            System.out.println("lessonId: " + lessonId);
+            getNotesFromDataBase(paraDayView, lessonId);
             myArray = new String[]{lesson_time,building + " " + auditorium,discipline,teacher,id};
             conn.disconnect();
         }
@@ -123,5 +135,33 @@ public class GetDataTeacher extends AsyncTask<Void, Void, String[]> {
         this.textTeacher.setText(Html.fromHtml(myArray[1]));
         this.tLessonId.setText(Html.fromHtml(myArray[4]));
     }
-
+    private void getNotesFromDataBase(View paraDayView, String lesson_id) {
+        String url = "https://ginkel.ru/kipo/check_note_img_button.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        System.out.println("response: "+response);
+                        if(Objects.equals(response, "true")){
+                            ImageView myImg = paraDayView.findViewById(R.id.imageViewButton);
+                            myImg.setVisibility(View.VISIBLE);
+                            System.out.println("Добавил кнопку");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Обработка ошибки
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("lessonId", lesson_id);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(context).add(stringRequest);
+    }
 }

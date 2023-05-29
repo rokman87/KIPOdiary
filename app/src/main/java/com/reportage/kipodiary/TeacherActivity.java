@@ -153,7 +153,7 @@ public class TeacherActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
                 String selected_teacher = sharedPreferences.getString("selected_teacher", "");
                 //Запрос к гетдата
-                new GetDataTeacher(context, tTime, tDiscipline, tAuditorium, tTeacher,tLessonId, day, myArray, count, selected_teacher).execute();
+                new GetDataTeacher(context, tTime, tDiscipline, tAuditorium, tTeacher,tLessonId, day, myArray, count, selected_teacher, paraDayView).execute();
 
 
                     paraDayView.setOnClickListener(new View.OnClickListener() {
