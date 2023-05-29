@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,10 +34,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
-
-    private Spinner mySpinner;
-
 
     public class PostRequest extends AsyncTask<Void, Void, Integer> {
 
@@ -137,9 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 disciplineTextView.setText("Дисциплина");
                 TextView teacherTextView = paraDayView.findViewById(R.id.text_teacher);
                 teacherTextView.setText("Преподаватель");
-                TextView lessonIdTextView = paraDayView.findViewById(R.id.lesson_id);
-                teacherTextView.setText("id");
-                getNotesFromDataBase();
+
                 linearLayout.addView(paraDayView);
 
 
@@ -165,6 +158,10 @@ public class MainActivity extends AppCompatActivity {
                 String selectedGroup = sharedPreferences.getString("selected_group", "");
                 //Запрос к гетдата
                 new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, tLessonId, day, myArray, count, selectedGroup).execute();
+                TextView textLessonId = (TextView) paraDayView.findViewById(R.id.lesson_id);
+                String lesson_id = textLessonId.getText().toString();
+                getNotesFromDataBase(paraDayView, lesson_id);
+
 
                 paraDayView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -260,14 +257,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void getNotesFromDataBase() {
+    private void getNotesFromDataBase(View paraDayView, String lessonId) {
         String url = "https://ginkel.ru/kipo/check_note_img_button.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if(response != "false"){
-                            ImageView myImg = findViewById(R.id.imageViewButton);
+                            ImageView myImg = paraDayView.findViewById(R.id.imageViewButton);
                             myImg.setVisibility(View.INVISIBLE);
                             System.out.println("Убрал кнопку");
                         }
@@ -282,8 +279,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                TextView textView = findViewById(R.id.lesson_id);
-                String lessonId = textView.getText().toString();
                 params.put("lessonId", lessonId);
                 return params;
             }
