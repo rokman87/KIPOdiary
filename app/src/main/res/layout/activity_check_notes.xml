@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CheckNotes">
+    tools:context=".CheckNotes"
+    android:background="@drawable/frame_background">
 
 
     <TextView
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Lesson ID"
         android:textSize="20sp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        android:textColor="@color/black"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
