@@ -160,9 +160,8 @@ public class MainActivity extends AppCompatActivity {
                 new GetData(context, tTime, tDiscipline, tAuditorium, tTeacher, tLessonId, day, myArray, count, selectedGroup).execute();
                 TextView textLessonId = (TextView) paraDayView.findViewById(R.id.lesson_id);
                 String lesson_id = textLessonId.getText().toString();
+                System.out.println("lesson_id: " + lesson_id);
                 getNotesFromDataBase(paraDayView, lesson_id);
-
-
                 paraDayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -176,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(intent);
                     }
                 });
+
 
             }
         }
@@ -257,16 +257,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void getNotesFromDataBase(View paraDayView, String lessonId) {
+    private void getNotesFromDataBase(View paraDayView, String lesson_id) {
         String url = "https://ginkel.ru/kipo/check_note_img_button.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response != "false"){
+                        System.out.println("response: "+response);
+                        if(response == "true"){
                             ImageView myImg = paraDayView.findViewById(R.id.imageViewButton);
-                            myImg.setVisibility(View.INVISIBLE);
-                            System.out.println("Убрал кнопку");
+                            myImg.setVisibility(View.VISIBLE);
+                            System.out.println("Добавил кнопку");
                         }
                     }
                 },
@@ -279,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("lessonId", lessonId);
+                params.put("lessonId", lesson_id);
                 return params;
             }
         };

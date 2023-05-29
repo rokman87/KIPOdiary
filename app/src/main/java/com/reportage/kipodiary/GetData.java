@@ -22,14 +22,9 @@ import java.util.Date;
 public class GetData extends AsyncTask<Void, Void, String[]> {
 
     private final String selectedGroup;
-    private TextView tLessonId;
-    private int lCount = 0;
+    private TextView tLessonId, textTime, textDiscipline, textAuditorium, textTeacher;
+    private int lCount = 0, id = 1;
     private Context context;
-    private TextView textTime;
-    private TextView textDiscipline;
-    private TextView textAuditorium;
-    private TextView textTeacher;
-    private int id = 1; //1 = Сегодня, 2= Завтра
     private String[] myArray;
 
     public GetData(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, TextView tLessonId, int day, String[] maArray, int count, String selectedGroup) {

@@ -111,7 +111,8 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="15dp"
         android:elevation="4dp"
-        app:srcCompat="@drawable/note_button_icon" />
+        app:srcCompat="@drawable/note_button_icon"
+        android:visibility="invisible"/>
 
 
 </RelativeLayout>
