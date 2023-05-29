@@ -7,11 +7,18 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -24,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -130,7 +139,9 @@ public class MainActivity extends AppCompatActivity {
                 teacherTextView.setText("Преподаватель");
                 TextView lessonIdTextView = paraDayView.findViewById(R.id.lesson_id);
                 teacherTextView.setText("id");
+                getNotesFromDataBase();
                 linearLayout.addView(paraDayView);
+
 
                 //лист подписей
                 ArrayList<TextView> textViews = new ArrayList<>();
@@ -182,10 +193,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Добавляю селектор
-        //Spinner spinner = findViewById(R.id.mySpinner);
-        //new GetGroups(this, spinner).execute();
 
         //лист хедеров
         ArrayList<TextView> headers = new ArrayList<>();
@@ -251,6 +258,37 @@ public class MainActivity extends AppCompatActivity {
             postRequest.execute();
         }
 
+    }
+
+    private void getNotesFromDataBase() {
+        String url = "https://ginkel.ru/kipo/check_note_img_button.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response != "false"){
+                            ImageView myImg = findViewById(R.id.imageViewButton);
+                            myImg.setVisibility(View.INVISIBLE);
+                            System.out.println("Убрал кнопку");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Обработка ошибки
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                TextView textView = findViewById(R.id.lesson_id);
+                String lessonId = textView.getText().toString();
+                params.put("lessonId", lessonId);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(stringRequest);
     }
 
 

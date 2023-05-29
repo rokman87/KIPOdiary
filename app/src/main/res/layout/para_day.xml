@@ -103,7 +103,7 @@
         android:elevation="4dp"/>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageViewButton"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_alignTop="@+id/lesson_id"
