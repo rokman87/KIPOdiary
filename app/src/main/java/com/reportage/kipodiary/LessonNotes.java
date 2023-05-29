@@ -23,11 +23,13 @@ public class LessonNotes extends AppCompatActivity {
     private EditText notesEditText;
     private Button saveNotesButton;
     private String lessonId;
+    private String metod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson_notes);
+
 
         // Получаем lessonId
         lessonId = getIntent().getStringExtra("lesson_id");
@@ -36,20 +38,27 @@ public class LessonNotes extends AppCompatActivity {
         notesEditText = findViewById(R.id.notesEditText);
         saveNotesButton = findViewById(R.id.saveNotesButton);
 
+
+
+
+        //Получаем заметку
+        getNotesFromDataBase();
+
+
         // Добавляем слушатель нажатия на кнопку
         saveNotesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Получаем текст из EditText
-                String notes = notesEditText.getText().toString();
-
+                String notesNew = notesEditText.getText().toString();
+                String method = "addNotes";
                 // Сохраняем данные в базу данных
-                saveNotesToDatabase(notes);
+                saveNotesToDatabase(notesNew);
             }
         });
     }
 
-    private void saveNotesToDatabase(String notes) {
+    private void saveNotesToDatabase(String notesNew) {
         String url = "https://ginkel.ru/kipo/lesson_notes.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -57,6 +66,7 @@ public class LessonNotes extends AppCompatActivity {
                     public void onResponse(String response) {
                         Toast.makeText(LessonNotes.this, "Заметка добавлена", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LessonNotes.this, TeacherActivity.class);
+                        intent.putExtra("password", "true");
                         startActivity(intent);
                     }
                 },
@@ -70,7 +80,33 @@ public class LessonNotes extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("lessonId", lessonId);
-                params.put("notes", notes);
+                params.put("notes", notesNew);
+                return params;
+            }
+        };
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+
+    private void getNotesFromDataBase() {
+        String url = "https://ginkel.ru/kipo/get_notes_from_db.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        notesEditText.setText(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Обработка ошибки
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("lessonId", lessonId);
                 return params;
             }
         };
