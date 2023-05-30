@@ -58,9 +58,6 @@ public class PasswordActivity extends AppCompatActivity {
                     intent.putExtra("selected_teacher", selectedTeacher);
                     intent.putExtra("password", password);
                     startActivity(intent);
-                } else {
-                    // Отображаем сообщение об ошибке
-                    Toast.makeText(PasswordActivity.this, "Неверный пароль", Toast.LENGTH_SHORT).show();
                 }
             }
         });
