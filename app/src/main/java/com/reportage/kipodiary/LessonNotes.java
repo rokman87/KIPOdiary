@@ -1,5 +1,6 @@
 package com.reportage.kipodiary;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +24,6 @@ public class LessonNotes extends AppCompatActivity {
     private EditText notesEditText;
     private Button saveNotesButton;
     private String lessonId;
-    private String metod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +37,10 @@ public class LessonNotes extends AppCompatActivity {
         // Находим элементы
         notesEditText = findViewById(R.id.notesEditText);
         saveNotesButton = findViewById(R.id.saveNotesButton);
-
-
-
-
         //Получаем заметку
         getNotesFromDataBase();
+
+
 
 
         // Добавляем слушатель нажатия на кнопку
@@ -51,11 +49,20 @@ public class LessonNotes extends AppCompatActivity {
             public void onClick(View v) {
                 // Получаем текст из EditText
                 String notesNew = notesEditText.getText().toString();
-                String method = "addNotes";
                 // Сохраняем данные в базу данных
                 saveNotesToDatabase(notesNew);
             }
         });
+
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button backButton = findViewById(R.id.go_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+
     }
 
     private void saveNotesToDatabase(String notesNew) {
