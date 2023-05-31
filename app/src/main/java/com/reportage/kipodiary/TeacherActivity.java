@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -49,6 +50,9 @@ public class TeacherActivity extends AppCompatActivity {
 
     private String weekData;
     private Spinner spinner;
+    private String password;
+    private String previousSelectedDate;
+    private String selectedDate;
 
     public class PostRequest extends AsyncTask<Void, Void, Integer> {
 
@@ -97,7 +101,6 @@ public class TeacherActivity extends AppCompatActivity {
 
                 // преобразуем ответ в число
                 int result = Integer.parseInt(response);
-                System.out.println("result: " + result);
                 return result;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -132,12 +135,7 @@ public class TeacherActivity extends AppCompatActivity {
                     break;
             }
 
-            // Получаем Intent, который запустил эту Activity
-            Intent intent = getIntent();
 
-            // Получаем значение параметра "password"
-            String password = intent.getStringExtra("password");
-            System.out.println("password: " + password);
 
             // получаем корневой элемент макета
             for (int count = 0; count < lessonCount; count++) {
@@ -218,7 +216,6 @@ public class TeacherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Button backButton = findViewById(R.id.go_back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,22 +244,23 @@ public class TeacherActivity extends AppCompatActivity {
         }
 
 
-        // Первый день недели
-        Calendar calFirstDay = Calendar.getInstance();
-        calFirstDay.set(Calendar.DAY_OF_WEEK, calFirstDay.getFirstDayOfWeek());
-        Date firstDayOfWeek = calFirstDay.getTime();
-        String firstDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(firstDayOfWeek);
-        //Последний день недели
-        Calendar calLastDay = Calendar.getInstance();
-        calLastDay.set(Calendar.DAY_OF_WEEK, calLastDay.getFirstDayOfWeek() + 6);
-        Date lastDayOfWeek = calLastDay.getTime();
-        String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
-        //Объединяем
-        weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
 
+
+
+
+        // Получаем Intent, который запустил эту Activity
+        Intent intent = getIntent();
+        // Получаем значение параметра "password"
+        password = intent.getStringExtra("password");
+        previousSelectedDate = intent.getStringExtra("previousSelectedDate");
+        selectedDate = intent.getStringExtra("selectedDate");
+        System.out.println("password: " + password);
+        System.out.println("previousSelectedDate: " + previousSelectedDate);
+        System.out.println("selectedDate: " + selectedDate);
+        weekData = selectedDate;
         //Спинер
         spinner = findViewById(R.id.my_spinner);
-        getDataFromDataBase(spinner);
+        getDataFromDataBase();
 
         for (int t = 0; t < headers.size(); t++) {
 
@@ -294,8 +292,9 @@ public class TeacherActivity extends AppCompatActivity {
             postRequest.execute();
         }
 
+
     }
-    private void getDataFromDataBase(Spinner spinner) {
+    private void getDataFromDataBase() {
         String url = "https://ginkel.ru/kipo/get_data.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -312,6 +311,39 @@ public class TeacherActivity extends AppCompatActivity {
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(TeacherActivity.this, android.R.layout.simple_spinner_item, names);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             TeacherActivity.this.spinner.setAdapter(adapter);
+
+                            int positionNew = adapter.getPosition(selectedDate);
+                            spinner.setSelection(positionNew);
+
+                            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    System.out.println("Слушатель сработал");
+
+                                        // Получаем выбранное значение из Spinner
+                                        selectedDate = parent.getItemAtPosition(position).toString();
+                                        System.out.println("selectedDate: "+selectedDate);
+                                        // Проверяем, изменилось ли значение
+                                        if (!selectedDate.equals(previousSelectedDate)) {
+                                            // Сохраняем новое значение в переменную
+                                            previousSelectedDate = selectedDate;
+                                            // Создаем Intent для перехода на новую активность
+                                            Intent intent = new Intent(TeacherActivity.this, TeacherActivity.class);
+                                            // Добавляем выбранное значение в Intent
+                                            intent.putExtra("selectedDate", selectedDate);
+                                            intent.putExtra("password", password);
+                                            intent.putExtra("previousSelectedDate", previousSelectedDate);
+                                            // Запускаем новую активность
+                                            startActivity(intent);
+                                        }
+                                    
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+                                    // Ничего не делаем, если ничего не выбрано
+                                }
+                            });
                         } catch (JSONException e) {
                             Log.e(TAG, "Error parsing JSON", e);
                         }
