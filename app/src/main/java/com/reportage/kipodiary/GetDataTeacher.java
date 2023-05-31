@@ -22,9 +22,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,7 +29,7 @@ import java.util.Objects;
 
 public class GetDataTeacher extends AsyncTask<Void, Void, String[]> {
 
-    private final String selected_teacher;
+    private String selected_teacher, weekData;
     private final View paraDayView;
     private TextView tLessonId, textTime, textDiscipline, textAuditorium, textTeacher;
     private int lCount = 0;
@@ -40,7 +37,7 @@ public class GetDataTeacher extends AsyncTask<Void, Void, String[]> {
     private int id = 1; //1 = Сегодня, 2= Завтра
     private String[] myArray;
 
-    public GetDataTeacher(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, TextView tLessonId, int day, String[] maArray, int count, String selected_teacher, View paraDayView) {
+    public GetDataTeacher(Context context, TextView tTime, TextView tDiscipline, TextView tAuditorium, TextView tTeacher, TextView tLessonId, String weekData, int day, String[] maArray, int count, String selected_teacher, View paraDayView) {
         this.paraDayView=paraDayView;
         this.context= context;
         this.textTime= tTime;
@@ -52,28 +49,13 @@ public class GetDataTeacher extends AsyncTask<Void, Void, String[]> {
         this.lCount=count;
         this.selected_teacher= selected_teacher;
         this.tLessonId=tLessonId;
+        this.weekData=weekData;
     }
 
     @Override
     protected String[] doInBackground(Void... params) {
 
         try {
-            // Первый день недели
-            Calendar calFirstDay = Calendar.getInstance();
-            calFirstDay.set(Calendar.DAY_OF_WEEK, calFirstDay.getFirstDayOfWeek());
-            Date firstDayOfWeek = calFirstDay.getTime();
-            String firstDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(firstDayOfWeek);
-
-            //Последний день недели
-            Calendar calLastDay = Calendar.getInstance();
-            calLastDay.set(Calendar.DAY_OF_WEEK, calLastDay.getFirstDayOfWeek() + 6);
-            Date lastDayOfWeek = calLastDay.getTime();
-            String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
-            //Объединяем
-            String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
-
-
-
             URL url = new URL("https://ginkel.ru/kipo/api_teacher.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");

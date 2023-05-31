@@ -29,6 +29,8 @@ import java.util.Objects;
 public class TeacherActivity extends AppCompatActivity {
 
 
+    private String weekData;
+
     public class PostRequest extends AsyncTask<Void, Void, Integer> {
 
         private final TextView today_head_date;
@@ -154,7 +156,7 @@ public class TeacherActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
                 String selected_teacher = sharedPreferences.getString("selected_teacher", "");
                 //Запрос к гетдата
-                new GetDataTeacher(context, tTime, tDiscipline, tAuditorium, tTeacher,tLessonId, day, myArray, count, selected_teacher, paraDayView).execute();
+                new GetDataTeacher(context, tTime, tDiscipline, tAuditorium, tTeacher,tLessonId,weekData, day, myArray, count, selected_teacher, paraDayView).execute();
 
 
                     paraDayView.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +239,7 @@ public class TeacherActivity extends AppCompatActivity {
         Date lastDayOfWeek = calLastDay.getTime();
         String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
         //Объединяем
-        String weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
+        weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
         //Устанавливаю дату в топ
         ((TextView) findViewById(R.id.date)).setText(weekData);
 
