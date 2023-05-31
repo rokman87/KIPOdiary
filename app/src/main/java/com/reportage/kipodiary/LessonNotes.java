@@ -29,8 +29,6 @@ public class LessonNotes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson_notes);
-
-
         // Получаем lessonId
         lessonId = getIntent().getStringExtra("lesson_id");
         System.out.println("lessonId: " + lessonId);
@@ -39,10 +37,6 @@ public class LessonNotes extends AppCompatActivity {
         saveNotesButton = findViewById(R.id.saveNotesButton);
         //Получаем заметку
         getNotesFromDataBase();
-
-
-
-
         // Добавляем слушатель нажатия на кнопку
         saveNotesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,23 +68,17 @@ public class LessonNotes extends AppCompatActivity {
                         Toast.makeText(LessonNotes.this, "Заметка добавлена", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LessonNotes.this, TeacherActivity.class);
                         intent.putExtra("password", "true");
-                        startActivity(intent);
-                    }
-                },
+                        startActivity(intent);}},
                 new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Обработка ошибки
-                    }
-                }) {
+                    public void onErrorResponse(VolleyError error) {}}) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("lessonId", lessonId);
                 params.put("notes", notesNew);
                 return params;
-            }
-        };
+            }};
         Volley.newRequestQueue(this).add(stringRequest);
     }
 

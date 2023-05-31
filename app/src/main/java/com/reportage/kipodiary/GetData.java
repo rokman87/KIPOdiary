@@ -149,11 +149,9 @@ public class GetData extends AsyncTask<Void, Void, String[]> {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("response: "+response);
                         if(Objects.equals(response, "true")){
                             ImageView myImg = paraDayView.findViewById(R.id.imageViewButton);
                             myImg.setVisibility(View.VISIBLE);
-                            System.out.println("Добавил кнопку");
                         }
                     }
                 },
