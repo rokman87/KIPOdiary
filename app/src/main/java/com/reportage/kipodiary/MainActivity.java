@@ -1,17 +1,32 @@
 package com.reportage.kipodiary;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -24,10 +39,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private String weekData;
+    private Spinner spinner;
+
 
     public class PostRequest extends AsyncTask<Void, Void, Integer> {
 
@@ -182,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Кнопка назад
         Button backButton = findViewById(R.id.go_back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
         //лист хедеров
         ArrayList<TextView> headers = new ArrayList<>();
@@ -223,8 +243,14 @@ public class MainActivity extends AppCompatActivity {
         String lastDayOfWeekStr = new SimpleDateFormat("dd.MM.yyyy").format(lastDayOfWeek);
         //Объединяем
         weekData = firstDayOfWeekStr + " - " + lastDayOfWeekStr;
-        //Устанавливаю дату в топ
-        ((TextView) findViewById(R.id.date)).setText(weekData);
+
+        //Спинер
+        spinner = findViewById(R.id.my_spinner);
+        getDataFromDataBase(spinner);
+
+
+
+
 
         for (int t = 0; t < headers.size(); t++) {
 
@@ -257,8 +283,36 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
-
-
+    private void getDataFromDataBase(Spinner spinner) {
+        String url = "https://ginkel.ru/kipo/get_data.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+                            List<String> names = new ArrayList<>();
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String date = jsonObject.getString("date");
+                                names.add(date);
+                            }
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, names);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            MainActivity.this.spinner.setAdapter(adapter);
+                        } catch (JSONException e) {
+                            Log.e(TAG, "Error parsing JSON", e);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {}}) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }};
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
 }
