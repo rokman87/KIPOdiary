@@ -21,7 +21,6 @@ import java.util.Map;
 
 public class ChangePassword extends AppCompatActivity {
 
-    private String password;
     private String selectedTeacher;
     private String newPass;
     private EditText passwordEditText;
@@ -33,8 +32,6 @@ public class ChangePassword extends AppCompatActivity {
 
         // Получаем Intent, который запустил эту Activity
         Intent intent = getIntent();
-        // Получаем значение параметра "password"
-        password = intent.getStringExtra("password");
         selectedTeacher = intent.getStringExtra("selected_teacher");
 
 
@@ -45,7 +42,7 @@ public class ChangePassword extends AppCompatActivity {
         // Находим EditText для ввода пароля
         passwordEditText = findViewById(R.id.editTextPassword);
         // Получаем введенный пароль
-        newPass = passwordEditText.getText().toString();
+
 
         // Находим кнопку для входа по паролю и устанавливаем обработчик нажатия
         Button loginButton = findViewById(R.id.buttonSubmit);
@@ -54,6 +51,7 @@ public class ChangePassword extends AppCompatActivity {
             public void onClick(View view) {
                 // Отображаем сообщение
                 Toast.makeText(ChangePassword.this, "Пароль изменен", Toast.LENGTH_SHORT).show();
+                newPass = passwordEditText.getText().toString();
                 // Меняем пароль
                 changePass(selectedTeacher, newPass);
             }

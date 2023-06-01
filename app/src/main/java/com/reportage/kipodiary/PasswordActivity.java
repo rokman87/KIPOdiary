@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class PasswordActivity extends AppCompatActivity {
 
@@ -107,7 +108,6 @@ public class PasswordActivity extends AppCompatActivity {
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // Ошибка при выполнении запроса
                         // Вызываем метод для обработки результата
                         handlePasswordCheckResult(false);
                     }
@@ -136,11 +136,10 @@ public class PasswordActivity extends AppCompatActivity {
     private void handlePasswordCheckResult(boolean isPasswordCorrect) {
         // Проверяем пароль и выполняем вход, если пароль верный
         if (isPasswordCorrect) {
-            if(newPass == "true") {
+            if(Objects.equals(newPass, "true")) {
                 // Выполняем вход и переходим на следующую активность
                 Intent intent = new Intent(PasswordActivity.this, ChangePassword.class);
                 intent.putExtra("selected_teacher", selectedTeacher);
-                intent.putExtra("password", "true");
                 startActivity(intent);
             }
             else{
