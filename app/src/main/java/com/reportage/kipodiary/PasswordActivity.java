@@ -25,6 +25,8 @@ public class PasswordActivity extends AppCompatActivity {
 
     private String selectedTeacher;
     private EditText passwordEditText;
+    private String newPass = "false";
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class PasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Получаем введенный пароль
-                String password = passwordEditText.getText().toString();
+                password = passwordEditText.getText().toString();
 
                 // Проверяем пароль и выполняем вход, если пароль верный
                 if (checkPassword(password)) {
@@ -83,6 +85,12 @@ public class PasswordActivity extends AppCompatActivity {
                 {
                     @Override
                     public void onResponse(String response) {
+                        if (response.equals("newPass")) {
+                            // Пароль верный
+                            // Вызываем метод для обработки результата
+                            newPass = "true";
+                            handlePasswordCheckResult(true);
+                        }
                         // Обрабатываем ответ от PHP скрипта
                         if (response.equals("true")) {
                             // Пароль верный
@@ -128,12 +136,20 @@ public class PasswordActivity extends AppCompatActivity {
     private void handlePasswordCheckResult(boolean isPasswordCorrect) {
         // Проверяем пароль и выполняем вход, если пароль верный
         if (isPasswordCorrect) {
-            // Выполняем вход и переходим на следующую активность
-            Intent intent = new Intent(PasswordActivity.this, TeacherActivity.class);
-            intent.putExtra("selected_teacher", selectedTeacher);
-            //intent.putExtra("password", passwordEditText.getText().toString());
-            intent.putExtra("password", "true");
-            startActivity(intent);
+            if(newPass == "true") {
+                // Выполняем вход и переходим на следующую активность
+                Intent intent = new Intent(PasswordActivity.this, ChangePassword.class);
+                intent.putExtra("selected_teacher", selectedTeacher);
+                intent.putExtra("password", "true");
+                startActivity(intent);
+            }
+            else{
+                // Выполняем вход и переходим на следующую активность
+                Intent intent = new Intent(PasswordActivity.this, TeacherActivity.class);
+                intent.putExtra("selected_teacher", selectedTeacher);
+                intent.putExtra("password", "true");
+                startActivity(intent);
+            }
         } else {
             // Отображаем сообщение об ошибке
             Toast.makeText(PasswordActivity.this, "Неверный пароль", Toast.LENGTH_SHORT).show();
